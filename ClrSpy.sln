@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy", "ClrSpy\ClrSpy.csproj", "{E2111762-9A90-418D-9DAF-5C6563E4ECFE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "x86Thunk", "x86Thunk\x86Thunk.csproj", "{3BFE8B6E-3C26-494F-9FEB-B71A3E767D2B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E2111762-9A90-418D-9DAF-5C6563E4ECFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2111762-9A90-418D-9DAF-5C6563E4ECFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2111762-9A90-418D-9DAF-5C6563E4ECFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2111762-9A90-418D-9DAF-5C6563E4ECFE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BFE8B6E-3C26-494F-9FEB-B71A3E767D2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BFE8B6E-3C26-494F-9FEB-B71A3E767D2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BFE8B6E-3C26-494F-9FEB-B71A3E767D2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BFE8B6E-3C26-494F-9FEB-B71A3E767D2B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
