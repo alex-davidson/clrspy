@@ -8,6 +8,12 @@ Extremely basic tool for capturing stack-traces of .NET applications non-invasiv
 
 ## Licence
 
-This project is licensed under the UNLICENSE. You can do whatever you like with it.
+This project is licensed under the UNLICENSE (where valid; MIT Licence otherwise). You can do whatever you like with it.
 
-Other licence terms apply to its dependencies, however.
+Other licence terms apply to its dependencies and some components:
+* log4net: Apache Licence v2
+* Costura: MIT Licence
+* Fody: MIT Licence
+* Microsoft.Diagnostics.Runtime (CLRMD): MIT Licence
+* NDesk.Options (Options.cs): MIT Licence(?)
+* DumpStacksJob.cs is based on the CLRMD 'ClrStack' sample project: MIT Licence
