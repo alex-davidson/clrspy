@@ -185,3 +185,6 @@ FakesAssemblies/
 
 # Visual Studio 6 workspace options file
 *.opt
+
+# I do not use NuGet package restore, therefore this entire hierarchy needs to be committed:
+!/packages/**
