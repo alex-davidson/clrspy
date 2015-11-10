@@ -22,7 +22,11 @@ namespace ClrSpy
         public void Run(TextWriter output, ConsoleLog console)
         {
             GetArchitectureDependency().Assert();
-            WriteThreadStacks(output);
+            using (var target = AcquireTarget(pid))
+            {
+                var runtime = CreateRuntime(target);
+                WriteThreadStacks(runtime, output);
+            }
         }
         
         private ArchitectureDependency GetArchitectureDependency()
@@ -33,10 +37,8 @@ namespace ClrSpy
         }
 
         
-        private void WriteThreadStacks(TextWriter output)
+        private void WriteThreadStacks(ClrRuntime runtime, TextWriter output)
         {
-            ClrRuntime runtime = CreateRuntime(pid);
-
             // Walk each thread in the process.
             foreach (ClrThread thread in runtime.Threads)
             {
@@ -122,22 +124,25 @@ namespace ClrSpy
                 output.WriteLine();
             }
         }
-        
 
 
-        private ClrRuntime CreateRuntime(int pid)
+        private DataTarget AcquireTarget(int pid)
         {
             // Create the data target.  This tells us the versions of CLR loaded in the target process.
             var dataTarget = DataTarget.AttachToProcess(pid, 0, exclusive ? AttachFlag.NonInvasive : AttachFlag.Passive);
-            
+
             bool isTarget64Bit = dataTarget.PointerSize == 8;
             AssertCorrectBitness(isTarget64Bit);
 
-            if(!dataTarget.ClrVersions.Any()) throw new ErrorWithExitCodeException(2, "Target process does not appear to contain any CLR modules.");
+            return dataTarget;
+        }
+
+        private ClrRuntime CreateRuntime(DataTarget target)
+        {
+            if(!target.ClrVersions.Any()) throw new ErrorWithExitCodeException(2, "Target process does not appear to contain any CLR modules.");
 
             // Assume there's at most one CLR in the process:
-            var version = dataTarget.ClrVersions[0];
-            
+            var version = target.ClrVersions[0];
             return version.CreateRuntime();
         }
 
