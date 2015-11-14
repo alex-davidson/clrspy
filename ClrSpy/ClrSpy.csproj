@@ -61,6 +61,7 @@
     <Compile Include="CliSupport\ConsoleLog.cs" />
     <Compile Include="CliSupport\ErrorWithExitCodeException.cs" />
     <Compile Include="DumpStacksJob.cs" />
+    <Compile Include="JobType.cs" />
     <Compile Include="Native\NativeMethods.cs" />
     <Compile Include="Native\NativeWrappers.cs" />
     <Compile Include="Program.cs" />

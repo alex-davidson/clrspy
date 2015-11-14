@@ -13,10 +13,13 @@ namespace ClrSpy
         private readonly int pid;
         private readonly bool exclusive;
 
+        public bool DumpStackObjects { get; set; }
+
         public DumpStacksJob(int pid, bool exclusive)
         {
             this.pid = pid;
             this.exclusive = exclusive;
+            DumpStackObjects = exclusive;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
@@ -25,7 +28,7 @@ namespace ClrSpy
             using (var target = AcquireTarget(pid))
             {
                 var runtime = CreateRuntime(target);
-                WriteThreadStacks(runtime, output);
+                WriteThreadInfo(runtime, output);
             }
         }
         
@@ -35,93 +38,81 @@ namespace ClrSpy
             if(NativeWrappers.IsWin64(p)) return new ArchitectureDependency.x64();
             return new ArchitectureDependency.x86();
         }
-
         
-        private void WriteThreadStacks(ClrRuntime runtime, TextWriter output)
+        private void WriteThreadInfo(ClrRuntime runtime, TextWriter output)
         {
             // Walk each thread in the process.
-            foreach (ClrThread thread in runtime.Threads)
+            foreach (var thread in runtime.Threads)
             {
-                // The ClrRuntime.Threads will also report threads which have recently died, but their
-                // underlying datastructures have not yet been cleaned up.  This can potentially be
-                // useful in debugging (!threads displays this information with XXX displayed for their
-                // OS thread id).  You cannot walk the stack of these threads though, so we skip them
-                // here.
-                if (!thread.IsAlive)
-                    continue;
+                if (!thread.IsAlive) continue;
 
                 output.WriteLine("Thread {0:X}:", thread.OSThreadId);
                 output.WriteLine("Stack: {0:X} - {1:X}", thread.StackBase, thread.StackLimit);
 
-                // Each thread tracks a "last thrown exception".  This is the exception object which
-                // !threads prints.  If that exception object is present, we will display some basic
-                // exception data here.  Note that you can get the stack trace of the exception with
-                // ClrHeapException.StackTrace (we don't do that here).
-                ClrException exception = thread.CurrentException;
+                var exception = thread.CurrentException;
                 if (exception != null)
+                {
                     output.WriteLine("Exception: {0:X} ({1}), HRESULT={2:X}", exception.Address, exception.Type.Name, exception.HResult);
-
-                // Walk the stack of the thread and print output similar to !ClrStack.
-                output.WriteLine();
-                output.WriteLine("Managed Callstack:");
-                foreach (ClrStackFrame frame in thread.StackTrace)
-                {
-                    // Note that CLRStackFrame currently only has three pieces of data: stack pointer,
-                    // instruction pointer, and frame name (which comes from ToString).  Future
-                    // versions of this API will allow you to get the type/function/module of the
-                    // method (instead of just the name).  This is not yet implemented.
-                    output.WriteLine("{0,16:X} {1,16:X} {2}", frame.StackPointer, frame.InstructionPointer, frame.DisplayString);
                 }
+                
+                output.WriteLine(); 
 
-                var dso = false;
+                WriteStackTrace(thread, output);
+
                 // Print a !DumpStackObjects equivalent.
-                if (dso)
+                if (DumpStackObjects)
                 {
-                    // We'll need heap data to find objects on the stack.
-                    ClrHeap heap = runtime.GetHeap();
-
-                    // Walk each pointer aligned address on the stack.  Note that StackBase/StackLimit
-                    // is exactly what they are in the TEB.  This means StackBase > StackLimit on AMD64.
-                    ulong start = thread.StackBase;
-                    ulong stop = thread.StackLimit;
-
-                    // We'll walk these in pointer order.
-                    if (start > stop)
-                    {
-                        ulong tmp = start;
-                        start = stop;
-                        stop = tmp;
-                    }
-
                     output.WriteLine();
-                    output.WriteLine("Stack objects:");
-
-                    // Walk each pointer aligned address.  Ptr is a stack address.
-                    for (ulong ptr = start; ptr <= stop; ptr += (ulong)runtime.PointerSize)
-                    {
-                        // Read the value of this pointer.  If we fail to read the memory, break.  The
-                        // stack region should be in the crash dump.
-                        ulong obj;
-                        if (!runtime.ReadPointer(ptr, out obj))
-                            break;
-
-                        // 003DF2A4 
-                        // We check to see if this address is a valid object by simply calling
-                        // GetObjectType.  If that returns null, it's not an object.
-                        ClrType type = heap.GetObjectType(obj);
-                        if (type == null)
-                            continue;
-
-                        // Don't print out free objects as there tends to be a lot of them on
-                        // the stack.
-                        if (!type.IsFree)
-                            output.WriteLine("{0,16:X} {1,16:X} {2}", ptr, obj, type.Name);
-                    }
+                    WriteStackObjects(runtime, thread, output);
                 }
 
                 output.WriteLine();
                 output.WriteLine("----------------------------------");
                 output.WriteLine();
+            }
+        }
+
+        private static void WriteStackObjects(ClrRuntime runtime, ClrThread thread, TextWriter output)
+        {
+            var heap = runtime.GetHeap();
+            
+            ulong start = thread.StackBase;
+            ulong stop = thread.StackLimit;
+
+            if (start > stop) Swap(ref start, ref stop);
+
+            output.WriteLine("Stack objects:");
+
+            for (ulong ptr = start; ptr <= stop; ptr += (ulong) runtime.PointerSize)
+            {
+                ulong obj;
+                if (!runtime.ReadPointer(ptr, out obj)) break;
+
+                var type = heap.GetObjectType(obj);
+                if (type == null) continue;
+                if (type.IsFree) continue;
+
+                output.WriteLine("{0,16:X} {1,16:X} {2}", ptr, obj, type.Name);
+            }
+        }
+
+        private static void Swap(ref ulong start, ref ulong stop)
+        {
+            var tmp = start;
+            start = stop;
+            stop = tmp;
+        }
+
+        private static void WriteStackTrace(ClrThread thread, TextWriter output)
+        {
+            output.WriteLine("Managed Callstack:");
+            foreach (var frame in thread.StackTrace)
+            {
+                // Note that CLRStackFrame currently only has three pieces of data: stack pointer,
+                // instruction pointer, and frame name (which comes from ToString).  Future
+                // versions of this API will allow you to get the type/function/module of the
+                // method (instead of just the name).  This is not yet implemented.
+                output.WriteLine("{0,16:X} {1,16:X} {2}", frame.StackPointer, frame.InstructionPointer, frame.DisplayString);
             }
         }
 
@@ -137,7 +128,7 @@ namespace ClrSpy
             return dataTarget;
         }
 
-        private ClrRuntime CreateRuntime(DataTarget target)
+        private static ClrRuntime CreateRuntime(DataTarget target)
         {
             if(!target.ClrVersions.Any()) throw new ErrorWithExitCodeException(2, "Target process does not appear to contain any CLR modules.");
 
@@ -150,7 +141,7 @@ namespace ClrSpy
         {
             // Should never fail this check:
             if (Environment.Is64BitProcess != isTarget64Bit)
-                throw new ErrorWithExitCodeException(255, String.Format("Architecture mismatch:  Process is {0} but target is {1}", Environment.Is64BitProcess ? "64 bit" : "32 bit", isTarget64Bit ? "64 bit" : "32 bit"));
+                throw new ErrorWithExitCodeException(255, $"Architecture mismatch:  Process is {(Environment.Is64BitProcess ? "64 bit" : "32 bit")} but target is {(isTarget64Bit ? "64 bit" : "32 bit")}");
         }
 
     }

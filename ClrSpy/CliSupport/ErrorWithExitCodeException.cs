@@ -2,7 +2,7 @@ using System;
 
 namespace ClrSpy.CliSupport
 {
-    class ErrorWithExitCodeException : Exception
+    public class ErrorWithExitCodeException : Exception
     {
         public int ExitCode { get; }
 
