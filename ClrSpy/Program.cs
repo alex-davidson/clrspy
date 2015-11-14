@@ -28,7 +28,7 @@ namespace ClrSpy
                 
                 var console = new ConsoleLog(Console.Error, arguments.Verbose);
                 var job = new DebugJobFactory(new ProcessFinder()).Create(arguments, console);
-                console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
+                console.WriteLineVerbose($"Running as a {ProcessArchitecture.FromCurrentProcess().Describe()} process.");
                 job.Run(Console.Out, console);
 
                 return 0;
