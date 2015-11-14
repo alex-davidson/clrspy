@@ -58,8 +58,10 @@
   <ItemGroup>
     <Compile Include="Architecture\ArchitectureDependency.cs" />
     <Compile Include="Arguments.cs" />
+    <Compile Include="CliSupport\Column.cs" />
     <Compile Include="CliSupport\ConsoleLog.cs" />
     <Compile Include="CliSupport\ErrorWithExitCodeException.cs" />
+    <Compile Include="CliSupport\Tabulator.cs" />
     <Compile Include="DebugSession.cs" />
     <Compile Include="Jobs\DumpHeapJob.cs" />
     <Compile Include="Jobs\DumpStacksJob.cs" />

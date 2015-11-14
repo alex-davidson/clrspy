@@ -31,11 +31,20 @@ namespace ClrSpy.Jobs
                 .OrderByDescending(s => s.SizeInBytes.Total)
                 .ToList();
             
+            var tabulator = new Tabulator(
+                new Column("Total") { Width = 10, RightAlign = true },
+                new Column("Count") { Width = 10, RightAlign = true  },
+                new Column("Mean") { Width = 10, RightAlign = true  },
+                new Column("StdDev") { Width = 10, RightAlign = true  },
+                new Column("Median") { Width = 10, RightAlign = true  },
+                new Column("Max") { Width = 10, RightAlign = true  },
+                new Column("Type")
+                ) { Defaults = { Padding = 2 } };
             output.WriteLine("Heap object types:");
-            Line(output, "Total", "Count", "Mean", "StdDev", "Median", "Max", "Type");
+            output.WriteLine(tabulator.GetHeader());
             foreach(var s in stats)
             {
-                Line(output,
+                tabulator.Tabulate(output, 
                     s.SizeInBytes.Total,
                     s.SizeInBytes.Count,
                     Math.Round(s.SizeInBytes.Mean),
@@ -43,14 +52,10 @@ namespace ClrSpy.Jobs
                     Math.Round(s.SizeInBytes.Median),
                     s.SizeInBytes.Maximum,
                     s.TypeName);
+                output.WriteLine();
             }
         }
 
-        private static void Line(TextWriter output, params object[] parts)
-        {
-            output.WriteLine(String.Join("  ", parts.Select(h => h.ToString().PadLeft(10))));
-        }
-        
         private IList<RawTypeInfo> CollectHeapInfo()
         {
             using (var session = DebugSession.Create(Pid, true))
