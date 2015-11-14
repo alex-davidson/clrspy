@@ -9,6 +9,7 @@ using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
 using ClrSpy.Jobs;
 using ClrSpy.Processes;
+using Microsoft.Win32;
 
 namespace ClrSpy
 {
@@ -16,6 +17,8 @@ namespace ClrSpy
     {
         public static int Main(string[] args)
         {
+            if (!AssertSufficientDotNetVersion()) return 255;
+
             var arguments = new Arguments();
             var options = CreateOptions(arguments);
             try
@@ -50,6 +53,42 @@ namespace ClrSpy
             {
                 Console.Error.WriteLine(ex);
                 return 255;
+            }
+        }
+
+        private static bool AssertSufficientDotNetVersion()
+        {
+            var dotNetVersion = GetDotNetVersion();
+            if (dotNetVersion > new Version(4, 5)) return true;
+
+            Console.Error.WriteLine("This application must run under .NET 4.5 or later.");
+            if (dotNetVersion != null)
+            {
+                Console.Error.WriteLine($"Currently running under: {dotNetVersion}");
+            }
+            else
+            {
+                Console.Error.WriteLine("The current .NET version could not be determined.");
+            }
+            return false;
+        }
+
+        private static Version GetDotNetVersion()
+        {
+            if(Environment.Version.Major < 4) return Environment.Version;
+            try
+            {
+                var versionKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client");
+                if(versionKey == null) return null; // Should be there for .NET 4.0+, surely?
+                var versionString = versionKey.GetValue("Version")?.ToString();
+
+                Version version;
+                if(!Version.TryParse(versionString, out version)) return null;
+                return version;
+            }
+            catch
+            {
+                return null;
             }
         }
 
