@@ -3,21 +3,21 @@ using System.IO;
 using ClrSpy.CliSupport;
 using Microsoft.Diagnostics.Runtime;
 
-namespace ClrSpy
+namespace ClrSpy.Jobs
 {
-    public class DumpHeapJob
+    public class DumpHeapJob : IDebugJob
     {
-        private readonly int pid;
-        
+        public int Pid { get; }
+
         public DumpHeapJob(int pid, bool exclusive)
         {
             if(!exclusive) throw new ArgumentException("Heap analysis requires suspending the target process.");
-            this.pid = pid;
+            this.Pid = pid;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
         {
-            using (var session = DebugSession.Create(pid, true))
+            using (var session = DebugSession.Create(Pid, true))
             {
                 var runtime = session.CreateRuntime();
                 WriteHeapInfo(runtime, output);

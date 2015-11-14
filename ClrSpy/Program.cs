@@ -4,8 +4,10 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
+using ClrSpy.Jobs;
 
 namespace ClrSpy
 {
@@ -19,8 +21,12 @@ namespace ClrSpy
             {
                 var remaining = options.Parse(args).ToArray();
                 arguments.ParseRemaining(remaining);
-                arguments.Validate();
-                Run(arguments);
+                
+                var job = new DebugJobFactory().Create(arguments);
+                var console = new ConsoleLog(Console.Error, arguments.Verbose);
+                console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
+                job.Run(Console.Out, console);
+
                 return 0;
             }
             catch(Requires32BitEnvironmentException ex)
@@ -59,35 +65,5 @@ namespace ClrSpy
         {
             return new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
         }
-            
-        private static void Run(Arguments arguments)
-        {
-            var console = new ConsoleLog(Console.Error, arguments.Verbose);
-            switch(arguments.JobType)
-            {
-                case JobType.DumpStacks:
-                    {
-                        var job = new DumpStacksJob(arguments.Pid.Value, arguments.PauseTargetProcess);
-
-                        console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
-                        job.Run(Console.Out, console);
-                        break;
-                    }
-
-                case JobType.DumpHeap:
-                    {
-                        if(!arguments.PauseTargetProcess) throw new ErrorWithExitCodeException(2, "The -x switch is required in order to dump heap information.");
-                        var job  = new DumpHeapJob(arguments.Pid.Value, arguments.PauseTargetProcess);
-
-                        console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
-                        job.Run(Console.Out, console);
-                        break;
-                    }
-                    
-                default:
-                    throw new ErrorWithExitCodeException(1, $"Unsupported operation: {arguments.JobType}");
-            }
-        }
-        
     }
 }

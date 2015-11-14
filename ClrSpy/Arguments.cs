@@ -34,10 +34,5 @@ namespace ClrSpy
                 JobType = jobType;
             }
         }
-
-        public void Validate()
-        {
-            if(Pid == null) throw new ErrorWithExitCodeException(1, "No process ID specified.") { ShowUsage = true };
-        }
     }
 }

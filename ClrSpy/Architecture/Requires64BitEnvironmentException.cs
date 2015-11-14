@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using ClrSpy.CliSupport;
 
-namespace ClrSpy
+namespace ClrSpy.Architecture
 {
     class Requires64BitEnvironmentException : ErrorWithExitCodeException
     {

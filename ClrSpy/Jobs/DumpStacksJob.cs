@@ -2,25 +2,25 @@ using System.IO;
 using ClrSpy.CliSupport;
 using Microsoft.Diagnostics.Runtime;
 
-namespace ClrSpy
+namespace ClrSpy.Jobs
 {
-    public class DumpStacksJob
+    public class DumpStacksJob : IDebugJob
     {
-        private readonly int pid;
-        private readonly bool exclusive;
+        public int Pid { get; }
+        public bool Exclusive { get; }
 
         public bool DumpStackObjects { get; set; }
 
         public DumpStacksJob(int pid, bool exclusive)
         {
-            this.pid = pid;
-            this.exclusive = exclusive;
+            this.Pid = pid;
+            this.Exclusive = exclusive;
             DumpStackObjects = exclusive;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
         {
-            using (var session = DebugSession.Create(pid, exclusive))
+            using (var session = DebugSession.Create(Pid, Exclusive))
             {
                 var runtime = session.CreateRuntime();
                 WriteThreadInfo(runtime, output);

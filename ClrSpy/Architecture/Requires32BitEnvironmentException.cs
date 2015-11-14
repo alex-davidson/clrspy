@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 
-namespace ClrSpy
+namespace ClrSpy.Architecture
 {
     class Requires32BitEnvironmentException : InvalidOperationException
     {

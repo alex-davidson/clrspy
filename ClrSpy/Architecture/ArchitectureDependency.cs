@@ -1,6 +1,6 @@
 using System;
 
-namespace ClrSpy
+namespace ClrSpy.Architecture
 {
     public abstract class ArchitectureDependency
     {
