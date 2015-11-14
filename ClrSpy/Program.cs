@@ -19,6 +19,7 @@ namespace ClrSpy
             {
                 var remaining = options.Parse(args).ToArray();
                 arguments.ParseRemaining(remaining);
+                arguments.Validate();
                 Run(arguments);
                 return 0;
             }
@@ -32,7 +33,8 @@ namespace ClrSpy
                 if(ex.ShowUsage)
                 {
                     var codeBase = GetPathToSelf();
-                    Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <pid> [options]");
+                    Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <mode> [options]");
+                    Console.Error.WriteLine("  where mode is one of: dumpstacks, dumpheap");
                     options.WriteOptionDescriptions(Console.Error);
                 }
                 return ex.ExitCode;
@@ -47,7 +49,7 @@ namespace ClrSpy
         public static Options CreateOptions(Arguments arguments)
         {
             return new Options {
-                { "x|exclusive", "Pause the target process while reading its state.", o => arguments.PauseTargetProcess = true },
+                { "x|exclusive", "Pause the target process while reading its state. Required for obtaining heap information.", o => arguments.PauseTargetProcess = true },
                 { "v|verbose", "Increase logging verbosity.", o => arguments.Verbose = true },
                 { "p=|pid=|process-id=", "PID of the target process.", (int o) => arguments.Pid = o },
             };
@@ -60,16 +62,28 @@ namespace ClrSpy
             
         private static void Run(Arguments arguments)
         {
+            var console = new ConsoleLog(Console.Error, arguments.Verbose);
             switch(arguments.JobType)
             {
                 case JobType.DumpStacks:
-                    var job = new DumpStacksJob(arguments.Pid.Value, arguments.PauseTargetProcess);
-                    var console = new ConsoleLog(Console.Error, arguments.Verbose);
+                    {
+                        var job = new DumpStacksJob(arguments.Pid.Value, arguments.PauseTargetProcess);
 
-                    console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
-                    job.Run(Console.Out, console);
-                    break;
+                        console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
+                        job.Run(Console.Out, console);
+                        break;
+                    }
 
+                case JobType.DumpHeap:
+                    {
+                        if(!arguments.PauseTargetProcess) throw new ErrorWithExitCodeException(2, "The -x switch is required in order to dump heap information.");
+                        var job  = new DumpHeapJob(arguments.Pid.Value, arguments.PauseTargetProcess);
+
+                        console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
+                        job.Run(Console.Out, console);
+                        break;
+                    }
+                    
                 default:
                     throw new ErrorWithExitCodeException(1, $"Unsupported operation: {arguments.JobType}");
             }

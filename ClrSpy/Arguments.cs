@@ -21,14 +21,23 @@ namespace ClrSpy
         {
             if(!Pid.HasValue)
             {
+                // Legacy syntax: default job and no pid.
                 var pidString = args.FirstOrDefault();
                 int pid;
-                if (!Int32.TryParse(pidString, out pid))
-                {
-                    throw new ErrorWithExitCodeException(1, "No process ID specified.") { ShowUsage = true };
-                }
-                Pid = pid;
+                if (Int32.TryParse(pidString, out pid)) Pid = pid;
+                return;
             }
+
+            JobType jobType;
+            if(Enum.TryParse(args.FirstOrDefault(), true, out jobType))
+            {
+                JobType = jobType;
+            }
+        }
+
+        public void Validate()
+        {
+            if(Pid == null) throw new ErrorWithExitCodeException(1, "No process ID specified.") { ShowUsage = true };
         }
     }
 }

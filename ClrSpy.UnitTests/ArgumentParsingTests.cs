@@ -37,12 +37,31 @@ namespace ClrSpy.UnitTests
             Assert.That(parsed.JobType, Is.EqualTo(JobType.DumpStacks));
         }
 
+        [Test]
+        public void SpecifyingDumpStacksJobWithPidSwitch_DumpsStacksForProcess()
+        {
+            var parsed = Parse("dumpstacks", "-p", "1234");
+
+            Assert.That(parsed.Pid, Is.EqualTo(1234));
+            Assert.That(parsed.JobType, Is.EqualTo(JobType.DumpStacks));
+        }
+        
+        [Test]
+        public void SpecifyingDumpHeapJobWithPidSwitch_DumpsHeapForProcess()
+        {
+            var parsed = Parse("dumpheap", "-p", "1234");
+
+            Assert.That(parsed.Pid, Is.EqualTo(1234));
+            Assert.That(parsed.JobType, Is.EqualTo(JobType.DumpHeap));
+        }
+
         private static Arguments Parse(params string[] args)
         {
             var arguments = new Arguments();
             var options = Program.CreateOptions(arguments);
             var remaining = options.Parse(args).ToArray();
             arguments.ParseRemaining(remaining);
+            arguments.Validate();
             return arguments;
         }
     }
