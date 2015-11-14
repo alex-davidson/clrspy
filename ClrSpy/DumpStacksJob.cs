@@ -1,10 +1,6 @@
-using System;
-using System.Diagnostics;
 using System.IO;
 using ClrSpy.CliSupport;
-using ClrSpy.Native;
 using Microsoft.Diagnostics.Runtime;
-using System.Linq;
 
 namespace ClrSpy
 {
@@ -24,19 +20,11 @@ namespace ClrSpy
 
         public void Run(TextWriter output, ConsoleLog console)
         {
-            GetArchitectureDependency().Assert();
-            using (var target = AcquireTarget(pid))
+            using (var session = DebugSession.Create(pid, exclusive))
             {
-                var runtime = CreateRuntime(target);
+                var runtime = session.CreateRuntime();
                 WriteThreadInfo(runtime, output);
             }
-        }
-        
-        private ArchitectureDependency GetArchitectureDependency()
-        {
-            var p = Process.GetProcessById(pid);
-            if(NativeWrappers.IsWin64(p)) return new ArchitectureDependency.x64();
-            return new ArchitectureDependency.x86();
         }
         
         private void WriteThreadInfo(ClrRuntime runtime, TextWriter output)
@@ -79,7 +67,7 @@ namespace ClrSpy
             ulong start = thread.StackBase;
             ulong stop = thread.StackLimit;
 
-            if (start > stop) Swap(ref start, ref stop);
+            if (start > stop) Util.Swap(ref start, ref stop);
 
             output.WriteLine("Stack objects:");
 
@@ -96,13 +84,6 @@ namespace ClrSpy
             }
         }
 
-        private static void Swap(ref ulong start, ref ulong stop)
-        {
-            var tmp = start;
-            start = stop;
-            stop = tmp;
-        }
-
         private static void WriteStackTrace(ClrThread thread, TextWriter output)
         {
             output.WriteLine("Managed Callstack:");
@@ -115,34 +96,5 @@ namespace ClrSpy
                 output.WriteLine("{0,16:X} {1,16:X} {2}", frame.StackPointer, frame.InstructionPointer, frame.DisplayString);
             }
         }
-
-
-        private DataTarget AcquireTarget(int pid)
-        {
-            // Create the data target.  This tells us the versions of CLR loaded in the target process.
-            var dataTarget = DataTarget.AttachToProcess(pid, 0, exclusive ? AttachFlag.NonInvasive : AttachFlag.Passive);
-
-            bool isTarget64Bit = dataTarget.PointerSize == 8;
-            AssertCorrectBitness(isTarget64Bit);
-
-            return dataTarget;
-        }
-
-        private static ClrRuntime CreateRuntime(DataTarget target)
-        {
-            if(!target.ClrVersions.Any()) throw new ErrorWithExitCodeException(2, "Target process does not appear to contain any CLR modules.");
-
-            // Assume there's at most one CLR in the process:
-            var version = target.ClrVersions[0];
-            return version.CreateRuntime();
-        }
-
-        private static void AssertCorrectBitness(bool isTarget64Bit)
-        {
-            // Should never fail this check:
-            if (Environment.Is64BitProcess != isTarget64Bit)
-                throw new ErrorWithExitCodeException(255, $"Architecture mismatch:  Process is {(Environment.Is64BitProcess ? "64 bit" : "32 bit")} but target is {(isTarget64Bit ? "64 bit" : "32 bit")}");
-        }
-
     }
 }

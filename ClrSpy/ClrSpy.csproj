@@ -60,6 +60,7 @@
     <Compile Include="Arguments.cs" />
     <Compile Include="CliSupport\ConsoleLog.cs" />
     <Compile Include="CliSupport\ErrorWithExitCodeException.cs" />
+    <Compile Include="DebugSession.cs" />
     <Compile Include="DumpHeapJob.cs" />
     <Compile Include="DumpStacksJob.cs" />
     <Compile Include="JobType.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="Architecture\Requires32BitEnvironmentException.cs" />
     <Compile Include="Architecture\Requires64BitEnvironmentException.cs" />
     <Compile Include="CliSupport\ThirdParty\Options.cs" />
+    <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
