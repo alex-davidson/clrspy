@@ -21,9 +21,15 @@ namespace x86Thunk
             var assembly = Assembly.LoadFile(program);
             if(assembly.EntryPoint == null) return 255; // No entry point.
             if(assembly.CodeBase == Assembly.GetEntryAssembly().CodeBase) return 255; // Recursion.
-            
+ 
+            Bootstrap.WasUsed = true;           
             object ret = assembly.EntryPoint.Invoke(null, new object[] { args.Skip(1).ToArray() });
             return (ret == null) ? 0 : (int)ret;
         }
+    }
+
+    public static class Bootstrap
+    {
+        public static bool WasUsed {get; internal set; }
     }
 }
