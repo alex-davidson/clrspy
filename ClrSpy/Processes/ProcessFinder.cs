@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ClrSpy.Architecture;
+using ClrSpy.Native;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Processes
@@ -38,7 +40,7 @@ namespace ClrSpy.Processes
         
         public IEnumerable<VersionInfo> EnumerateClrVersions(IProcessInfo info)
         {
-            using (var session = DebugSession.Create(info.Pid))
+            using (var session = DebugSession.Create(info))
             {
                 return session.DataTarget.ClrVersions.Select(v => v.Version);
             }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ClrSpy.Architecture;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Processes
@@ -15,7 +16,7 @@ namespace ClrSpy.Processes
                 Name = process.ProcessName,
                 VirtualMemorySizeBytes = process.VirtualMemorySize64,
                 WorkingSetSizeBytes = process.WorkingSet64,
-                Handle = process.Handle
+                Architecture = ProcessArchitecture.FromProcess(process)
             };
         }
 
@@ -23,7 +24,6 @@ namespace ClrSpy.Processes
         public long VirtualMemorySizeBytes { get; set; }
         public string Name { get; set; }
         public int Pid { get; set; }
-        public IntPtr Handle { get;set; }
-
+        public ProcessArchitecture Architecture { get; set; }
     }
 }

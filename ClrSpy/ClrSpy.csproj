@@ -56,7 +56,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Architecture\ArchitectureDependency.cs" />
+    <Compile Include="Architecture\ProcessArchitecture.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="CliSupport\Column.cs" />
     <Compile Include="CliSupport\ConsoleLog.cs" />

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using ClrSpy.Architecture;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Processes
@@ -10,6 +11,6 @@ namespace ClrSpy.Processes
         long VirtualMemorySizeBytes { get; }
         string Name { get; }
         int Pid { get; }
-        IntPtr Handle { get; }
+        ProcessArchitecture Architecture { get; }
     }
 }

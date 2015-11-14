@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.IO;
 using ClrSpy.CliSupport;
 using System.Linq;
+using ClrSpy.Processes;
 
 namespace ClrSpy.Jobs
 {
     public class DumpHeapJob : IDebugJob
     {
-        public int Pid { get; }
+        private readonly IProcessInfo process;
+        public int Pid => process.Pid;
 
-        public DumpHeapJob(int pid, bool exclusive)
+        public DumpHeapJob(IProcessInfo process, bool exclusive)
         {
             if(!exclusive) throw new ArgumentException("Heap analysis requires suspending the target process.");
-            this.Pid = pid;
+            this.process = process;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
@@ -58,7 +60,7 @@ namespace ClrSpy.Jobs
 
         private IList<RawTypeInfo> CollectHeapInfo()
         {
-            using (var session = DebugSession.Create(Pid, true))
+            using (var session = DebugSession.Create(process, true))
             {
                 var runtime = session.CreateRuntime();
                 var heap = runtime.GetHeap();

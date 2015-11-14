@@ -7,7 +7,7 @@ namespace ClrSpy.Native
 {
     public static class NativeWrappers
     {
-        public static bool IsWin64(IProcessInfo process)
+        public static bool IsWin64(Process process)
         {
             if ((Environment.OSVersion.Version.Major > 5)
                 || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
