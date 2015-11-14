@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
+using ClrSpy.Jobs;
 using ClrSpy.Native;
+using ClrSpy.Processes;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy
@@ -37,7 +39,7 @@ namespace ClrSpy
         
         private static ArchitectureDependency GetArchitectureDependency(int pid)
         {
-            var p = Process.GetProcessById(pid);
+            var p = new ProcessFinder().GetProcessById(pid);
             if(NativeWrappers.IsWin64(p)) return new ArchitectureDependency.x64();
             return new ArchitectureDependency.x86();
         }

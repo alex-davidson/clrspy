@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ClrSpy.CliSupport;
 
 namespace ClrSpy
 {
@@ -16,6 +15,7 @@ namespace ClrSpy
         public int? Pid { get; set; }
         public bool PauseTargetProcess { get; set; }
         public JobType JobType { get; set; }
+        public string ProcessName { get; set; }
 
         public void ParseRemaining(IEnumerable<string> args)
         {
@@ -24,8 +24,11 @@ namespace ClrSpy
                 // Legacy syntax: default job and no pid.
                 var pidString = args.FirstOrDefault();
                 int pid;
-                if (Int32.TryParse(pidString, out pid)) Pid = pid;
-                return;
+                if (Int32.TryParse(pidString, out pid))
+                {
+                    Pid = pid;
+                    return;
+                }
             }
 
             JobType jobType;

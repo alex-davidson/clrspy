@@ -32,6 +32,14 @@ namespace ClrSpy.UnitTests
             Assert.That(parsed.JobType, Is.EqualTo(JobType.DumpHeap));
         }
 
+        [Test]
+        public void CanSpecifyProcessByName()
+        {
+            var parsed = Parse("dumpstacks", "-n", "process.exe");
+
+            Assert.That(parsed.ProcessName, Is.EqualTo("process.exe"));
+        }
+
         private static Arguments Parse(params string[] args)
         {
             var arguments = new Arguments();

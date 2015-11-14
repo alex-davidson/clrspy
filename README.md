@@ -3,7 +3,7 @@
 Extremely basic tool for capturing stack-traces of .NET applications non-invasively. Should work against 32-bit or 64-bit processes.
 
     clrspy [-v] [-x] <pid>
-    clrspy [dumpstacks|dumpheap] [-v] [-x] -p <pid>
+    clrspy [dumpstacks|dumpheap] [-v] [-x] [-p <pid>] [-n <name>]
 
 
 ## Licence

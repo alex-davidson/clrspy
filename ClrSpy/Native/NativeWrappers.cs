@@ -1,11 +1,13 @@
 using System;
 using System.Diagnostics;
+using ClrSpy.Jobs;
+using ClrSpy.Processes;
 
 namespace ClrSpy.Native
 {
     public static class NativeWrappers
     {
-        public static bool IsWin64(Process process)
+        public static bool IsWin64(IProcessInfo process)
         {
             if ((Environment.OSVersion.Version.Major > 5)
                 || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))

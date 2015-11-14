@@ -67,6 +67,11 @@
     <Compile Include="Jobs\DumpStacksJob.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
     <Compile Include="Jobs\DebugJobFactory.cs" />
+    <Compile Include="Processes\IProcessFinder.cs" />
+    <Compile Include="Processes\IProcessInfo.cs" />
+    <Compile Include="Processes\ProcessFinder.cs" />
+    <Compile Include="Processes\ProcessInfo.cs" />
+    <Compile Include="Processes\ProcessNotFoundException.cs" />
     <Compile Include="JobType.cs" />
     <Compile Include="Native\NativeMethods.cs" />
     <Compile Include="Native\NativeWrappers.cs" />

@@ -8,6 +8,7 @@ using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
 using ClrSpy.Jobs;
+using ClrSpy.Processes;
 
 namespace ClrSpy
 {
@@ -22,8 +23,8 @@ namespace ClrSpy
                 var remaining = options.Parse(args).ToArray();
                 arguments.ParseRemaining(remaining);
                 
-                var job = new DebugJobFactory().Create(arguments);
                 var console = new ConsoleLog(Console.Error, arguments.Verbose);
+                var job = new DebugJobFactory(new ProcessFinder()).Create(arguments, console);
                 console.WriteLineVerbose(Environment.Is64BitProcess ? "Running as 64-bit process." : "Running as 32-bit process.");
                 job.Run(Console.Out, console);
 
@@ -58,6 +59,7 @@ namespace ClrSpy
                 { "x|exclusive", "Pause the target process while reading its state. Required for obtaining heap information.", o => arguments.PauseTargetProcess = true },
                 { "v|verbose", "Increase logging verbosity.", o => arguments.Verbose = true },
                 { "p=|pid=|process-id=", "PID of the target process.", (int o) => arguments.Pid = o },
+                { "n=|name=|process-name=", "Name of the target process.", o => arguments.ProcessName = o },
             };
         }
         
