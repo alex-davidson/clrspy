@@ -102,7 +102,7 @@ namespace ClrSpy.Jobs
             console.WriteLine(tabulator.GetHeader());
             foreach (var candidate in processes.OrderBy(c => c.Pid))
             {
-                console.WriteLine(tabulator.Tabulate(candidate.Pid, candidate.Name, $"{candidate.VirtualMemorySizeBytes.InKilobytes()} KB", DescribeCLRVersions(candidate)));
+                console.WriteLine(tabulator.Tabulate(candidate.Pid, candidate.Name, $"{candidate.WorkingSetSizeBytes.InKilobytes()} KB", DescribeCLRVersions(candidate)));
             }
         }
 
