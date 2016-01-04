@@ -12,9 +12,8 @@ namespace ClrSpy.Jobs
         private readonly IProcessInfo process;
         public int Pid => process.Pid;
 
-        public DumpHeapJob(IProcessInfo process, bool exclusive)
+        public DumpHeapJob(IProcessInfo process)
         {
-            if(!exclusive) throw new ArgumentException("Heap analysis requires suspending the target process.");
             this.process = process;
         }
 

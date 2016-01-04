@@ -3,41 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
+using ClrSpy.Jobs;
 using ClrSpy.Processes;
 
-namespace ClrSpy.Jobs
+namespace ClrSpy.Configuration
 {
-    public class DebugJobFactory
+    public class DebugJobConfigurer
     {
         private readonly IProcessFinder processFinder;
 
-        public DebugJobFactory(IProcessFinder processFinder)
+        public DebugJobConfigurer(IProcessFinder processFinder)
         {
             this.processFinder = processFinder;
         }
-
-        public IDebugJob Create(Arguments arguments, ConsoleLog console)
+        
+        public IDebugJobFactory SelectFactory(JobType jobType)
         {
-            var process = ResolveTargetProcess(arguments, console);
-            switch(arguments.JobType ?? JobType.DumpStacks)
+            switch(jobType)
             {
                 case JobType.DumpStacks:
-                    {
-                        return new DumpStacksJob(process, arguments.ActivelyAttachToProcess);
-                    }
+                    return new DumpStacksJobFactory();
 
                 case JobType.DumpHeap:
-                    {
-                        if(!arguments.ActivelyAttachToProcess) throw new ErrorWithExitCodeException(1, "The -x switch is required in order to dump heap information.") { ShowUsage = true };
-                        return new DumpHeapJob(process, arguments.ActivelyAttachToProcess);
-                    }
+                    return new DumpHeapJobFactory();
                     
                 default:
-                    throw new ErrorWithExitCodeException(1, $"Unsupported operation: {arguments.JobType}");
+                    throw new ErrorWithExitCodeException(1, $"Unsupported operation: {jobType}");
             }
         }
-        
-        private IProcessInfo ResolveTargetProcess(Arguments arguments, ConsoleLog console)
+
+        public IProcessInfo ResolveTargetProcess(Arguments arguments, ConsoleLog console)
         {
             if(arguments.Pid == null)
             {

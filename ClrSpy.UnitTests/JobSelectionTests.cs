@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ClrSpy.CliSupport;
+using ClrSpy.Configuration;
 using ClrSpy.Jobs;
 using ClrSpy.Processes;
 using Moq;
@@ -16,14 +17,14 @@ namespace ClrSpy.UnitTests
     public class JobSelectionTests
     {
         private Mock<IProcessFinder> processFinder;
-        private DebugJobFactory jobFactory;
+        private DebugJobConfigurer jobConfigurer;
         private StringWriter stderr;
 
         [SetUp]
         public void SetUp()
         {
             processFinder = new Mock<IProcessFinder>();
-            jobFactory = new DebugJobFactory(processFinder.Object);
+            jobConfigurer = new DebugJobConfigurer(processFinder.Object);
             stderr = new StringWriter();
         }
 
@@ -150,7 +151,13 @@ namespace ClrSpy.UnitTests
             var options = Program.CreateOptions(arguments);
             var remaining = options.Parse(args).ToArray();
             arguments.ParseRemaining(ref remaining);
-            return jobFactory.Create(arguments, new ConsoleLog(stderr, false));
+            string[] remainingArgs = new string[0];
+            var jobFactory = jobConfigurer.SelectFactory(arguments.JobType ?? JobType.DumpStacks);
+            var configuredFactory = jobFactory.Configure(ref remainingArgs, arguments.ActivelyAttachToProcess);
+
+            var process = jobConfigurer.ResolveTargetProcess(arguments, new ConsoleLog(stderr, false));
+
+            return configuredFactory.CreateJob(process);
         }
     }
 }

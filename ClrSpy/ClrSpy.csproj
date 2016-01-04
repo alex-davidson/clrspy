@@ -64,9 +64,12 @@
     <Compile Include="CliSupport\Tabulator.cs" />
     <Compile Include="DebugSession.cs" />
     <Compile Include="Jobs\DumpHeapJob.cs" />
+    <Compile Include="Configuration\DumpHeapJobFactory.cs" />
     <Compile Include="Jobs\DumpStacksJob.cs" />
+    <Compile Include="Configuration\DumpStacksJobFactory.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
-    <Compile Include="Jobs\DebugJobFactory.cs" />
+    <Compile Include="Configuration\DebugJobFactory.cs" />
+    <Compile Include="Configuration\IDebugJobFactory.cs" />
     <Compile Include="Processes\IProcessFinder.cs" />
     <Compile Include="Processes\IProcessInfo.cs" />
     <Compile Include="Processes\ProcessFinder.cs" />

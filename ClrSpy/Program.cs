@@ -7,6 +7,7 @@ using System.Reflection;
 using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
+using ClrSpy.Configuration;
 using ClrSpy.Jobs;
 using ClrSpy.Processes;
 using Microsoft.Win32;
@@ -18,7 +19,8 @@ namespace ClrSpy
         public static int Main(string[] args)
         {
             if (!AssertSufficientDotNetVersion()) return 255;
-
+            
+            var configurer = new DebugJobConfigurer(new ProcessFinder());
             var arguments = new Arguments();
             var options = CreateOptions(arguments);
             try
@@ -27,7 +29,13 @@ namespace ClrSpy
                 arguments.ParseRemaining(ref remaining);
                 
                 var console = new ConsoleLog(Console.Error, arguments.Verbose);
-                var job = new DebugJobFactory(new ProcessFinder()).Create(arguments, console);
+                string[] remainingArgs = remaining;
+                var jobFactory = configurer.SelectFactory(arguments.JobType ?? JobType.DumpStacks);
+                var configuredFactory = jobFactory.Configure(ref remainingArgs, arguments.ActivelyAttachToProcess);
+
+                var process = configurer.ResolveTargetProcess(arguments, console);
+                var job = configuredFactory.CreateJob(process);
+
                 console.WriteLineVerbose($"Running as a {ProcessArchitecture.FromCurrentProcess().Describe()} process.");
                 job.Run(Console.Out, console);
 
