@@ -11,6 +11,11 @@ namespace ClrSpy.CliSupport
             ExitCode = exitCode;
         }
 
+        public ErrorWithExitCodeException(int exitCode, Exception exception) : base(exception.Message)
+        {
+            ExitCode = exitCode;
+        }
+
         public bool ShowUsage { get; set; }
     }
 }

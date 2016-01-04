@@ -62,14 +62,16 @@
     <Compile Include="CliSupport\ConsoleLog.cs" />
     <Compile Include="CliSupport\ErrorWithExitCodeException.cs" />
     <Compile Include="CliSupport\Tabulator.cs" />
-    <Compile Include="DebugSession.cs" />
+    <Compile Include="Configuration\ProcessListDescriber.cs" />
+    <Compile Include="Debugger\DebugSession.cs" />
     <Compile Include="Jobs\DumpHeapJob.cs" />
     <Compile Include="Configuration\DumpHeapJobFactory.cs" />
     <Compile Include="Jobs\DumpStacksJob.cs" />
     <Compile Include="Configuration\DumpStacksJobFactory.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
-    <Compile Include="Configuration\DebugJobFactory.cs" />
+    <Compile Include="Configuration\ProcessResolver.cs" />
     <Compile Include="Configuration\IDebugJobFactory.cs" />
+    <Compile Include="Debugger\NoClrModulesFoundException.cs" />
     <Compile Include="Processes\IProcessFinder.cs" />
     <Compile Include="Processes\IProcessInfo.cs" />
     <Compile Include="Processes\ProcessFinder.cs" />
@@ -78,6 +80,7 @@
     <Compile Include="JobType.cs" />
     <Compile Include="Native\NativeMethods.cs" />
     <Compile Include="Native\NativeWrappers.cs" />
+    <Compile Include="Processes\ProcessNotSpecifiedException.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Architecture\Requires32BitEnvironmentException.cs" />

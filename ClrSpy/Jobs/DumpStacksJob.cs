@@ -1,5 +1,6 @@
 using System.IO;
 using ClrSpy.CliSupport;
+using ClrSpy.Debugger;
 using ClrSpy.Processes;
 using Microsoft.Diagnostics.Runtime;
 

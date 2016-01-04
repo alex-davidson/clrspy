@@ -1,6 +1,4 @@
-﻿using Microsoft.Diagnostics.Runtime;
-using System;
-using System.Diagnostics;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -8,6 +6,7 @@ using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
 using ClrSpy.Configuration;
+using ClrSpy.Debugger;
 using ClrSpy.Jobs;
 using ClrSpy.Processes;
 using Microsoft.Win32;
@@ -20,28 +19,28 @@ namespace ClrSpy
         {
             if (!AssertSufficientDotNetVersion()) return 255;
             
-            var configurer = new DebugJobConfigurer(new ProcessFinder());
             var arguments = new Arguments();
             var options = CreateOptions(arguments);
             try
             {
-                var remaining = options.Parse(args).ToArray();
-                arguments.ParseRemaining(ref remaining);
-                
+                var remainingArgs = options.Parse(args).ToArray();
+                arguments.ParseRemaining(ref remainingArgs);
+
                 var console = new ConsoleLog(Console.Error, arguments.Verbose);
-                string[] remainingArgs = remaining;
-                var jobFactory = configurer.SelectFactory(arguments.JobType ?? JobType.DumpStacks);
+                var jobFactory = SelectFactory(arguments.JobType ?? JobType.DumpStacks);
+                if (jobFactory == null) throw new ErrorWithExitCodeException(1, $"Unsupported operation: {arguments.JobType}") { ShowUsage = true };
+
                 var configuredFactory = jobFactory.Configure(ref remainingArgs, arguments.ActivelyAttachToProcess);
 
-                var process = configurer.ResolveTargetProcess(arguments, console);
+                var process = ResolveTargetProcess(arguments, console);
                 var job = configuredFactory.CreateJob(process);
 
                 console.WriteLineVerbose($"Running as a {ProcessArchitecture.FromCurrentProcess().Describe()} process.");
-                job.Run(Console.Out, console);
+                ExecuteJob(console, job);
 
                 return 0;
             }
-            catch(Requires32BitEnvironmentException ex)
+            catch (Requires32BitEnvironmentException ex)
             {
                 return ex.ExecuteIn32BitProcess(GetPathToSelf(), args);
             }
@@ -50,18 +49,83 @@ namespace ClrSpy
                 Console.Error.WriteLine(ex.Message);
                 if(ex.ShowUsage)
                 {
-                    var codeBase = GetPathToSelf();
-                    Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <mode> [options]");
-                    Console.Error.WriteLine("  where mode is one of: dumpstacks, dumpheap");
-                    options.WriteOptionDescriptions(Console.Error);
+                    ShowUsage(arguments.JobType, options);
                 }
                 return ex.ExitCode;
             }
             catch (Exception ex)
             {
+                // Otherwise-unhandled exception.
                 Console.Error.WriteLine(ex);
                 return 255;
             }
+        }
+
+        private static void ExecuteJob(ConsoleLog console, IDebugJob job)
+        {
+            try
+            {
+                job.Run(Console.Out, console);
+            }
+            catch (NoClrModulesFoundException ex)
+            {
+                throw new ErrorWithExitCodeException(2, ex);
+            }
+        }
+
+        private static IProcessInfo ResolveTargetProcess(Arguments arguments, ConsoleLog console)
+        {
+            var processResolver = new ProcessResolver(new ProcessFinder());
+            try
+            {
+                return processResolver.ResolveTargetProcess(arguments.Pid, arguments.ProcessName);
+            }
+            catch(ProcessNotSpecifiedException ex)
+            {
+                throw new ErrorWithExitCodeException(1, ex.Message) { ShowUsage = true };
+            }
+            catch(ProcessNotFoundException ex) when(ex.Candidates.Any())
+            {
+                new ProcessListDescriber().DescribeCandidateProcesses(ex.Candidates.ToList(), console);
+                throw new ErrorWithExitCodeException(3, "Please specify a unique process Id using the -p switch.");
+            }
+            catch(ProcessNotFoundException ex)
+            {
+                throw new ErrorWithExitCodeException(3, ex.Message);
+            }
+        }
+        
+        public static IDebugJobFactory SelectFactory(JobType jobType)
+        {
+            switch(jobType)
+            {
+                case JobType.DumpStacks:
+                    return new DumpStacksJobFactory();
+
+                case JobType.DumpHeap:
+                    return new DumpHeapJobFactory();
+                    
+                default:
+                    throw new ErrorWithExitCodeException(1, $"Unsupported operation: {jobType}");
+            }
+        }
+
+        private static void ShowUsage(JobType? jobType, Options options)
+        {
+            var jobFactory = jobType == null ? null : SelectFactory(jobType.Value);
+            var codeBase = GetPathToSelf();
+            if (jobFactory == null)
+            {
+                Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <mode> [options]");
+                Console.Error.WriteLine("  where mode is one of: dumpstacks, dumpheap");
+            }
+            else
+            {
+                var convenientJobTypeString = jobType.ToString().ToLower();
+                Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} {convenientJobTypeString} [options]");
+                jobFactory.AddOptionDefinitions(options);
+            }
+            options.WriteOptionDescriptions(Console.Error);
         }
 
         private static bool AssertSufficientDotNetVersion()

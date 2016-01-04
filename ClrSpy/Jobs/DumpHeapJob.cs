@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using ClrSpy.CliSupport;
 using System.Linq;
+using ClrSpy.Debugger;
 using ClrSpy.Processes;
 
 namespace ClrSpy.Jobs

@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ArgumentParsingTests.cs" />
     <Compile Include="CliSupport\TabulatorTests.cs" />
+    <Compile Include="Configuration\ProcessResolverTests.cs" />
     <Compile Include="JobSelectionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticsTests.cs" />
