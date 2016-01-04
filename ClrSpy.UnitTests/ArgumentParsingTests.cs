@@ -7,14 +7,6 @@ namespace ClrSpy.UnitTests
     public class ArgumentParsingTests
     {
         [Test]
-        public void BareNumberIsParsedAsPid()
-        {
-            var parsed = Parse("1234");
-
-            Assert.That(parsed.Pid, Is.EqualTo(1234));
-        }
-        
-        [Test]
         public void DumpStacksJobTypeAndPidSwitchAreParsedAsSuch()
         {
             var parsed = Parse("dumpstacks", "-p", "1234");

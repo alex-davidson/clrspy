@@ -2,7 +2,8 @@
 {
     public enum JobType
     {
-        DumpStacks = 0, // default
-        DumpHeap = 1
+        Invalid = 0, // default
+        DumpStacks = 1,
+        DumpHeap = 2
     }
 }

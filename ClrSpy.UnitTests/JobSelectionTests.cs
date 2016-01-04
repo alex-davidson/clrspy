@@ -34,19 +34,7 @@ namespace ClrSpy.UnitTests
             
             Assert.That(exception.Message, Is.EqualTo("No process specified."));
         }
-
-        [Test]
-        public void SpecifyingPidOnly_CreatesDumpStacksJob()
-        {
-            AssumeProcessExists(1234);
-
-            var job = ParseAndCreateJob("1234");
-            
-            AssertFor<DumpStacksJob>(job, j => {
-                Assert.That(j.Pid, Is.EqualTo(1234));
-            });
-        }
-
+        
         [Test]
         public void SpecifyingPidSwitch_CreatesDumpStacksJob()
         {

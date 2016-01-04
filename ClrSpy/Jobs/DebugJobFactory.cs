@@ -19,7 +19,7 @@ namespace ClrSpy.Jobs
         public IDebugJob Create(Arguments arguments, ConsoleLog console)
         {
             var process = ResolveTargetProcess(arguments, console);
-            switch(arguments.JobType)
+            switch(arguments.JobType ?? JobType.DumpStacks)
             {
                 case JobType.DumpStacks:
                     {

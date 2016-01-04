@@ -6,11 +6,6 @@ namespace ClrSpy
 {
     public class Arguments
     {
-        public Arguments()
-        {
-            JobType = JobType.DumpStacks;
-        }
-
         public bool Verbose { get; set; }
         public int? Pid { get; set; }
         /// <summary>
@@ -19,29 +14,14 @@ namespace ClrSpy
         /// without this flag should exit with an error if it is not set.
         /// </summary>
         public bool ActivelyAttachToProcess { get; set; }
-        public JobType JobType { get; set; }
+        public JobType? JobType { get; set; }
         public string ProcessName { get; set; }
         
         public void ParseRemaining(ref string[] remaining)
         {
-            ParseLegacyArguments(ref remaining);
             ParseJobType(ref remaining);
         }
-
-        private void ParseLegacyArguments(ref string[] args)
-        {
-            if (!args.Any()) return;
-            if (Pid.HasValue) return;
-            // Legacy syntax: default job and no pid.
-            var pidString = args.First();
-            int pid;
-            if (Int32.TryParse(pidString, out pid))
-            {
-                Pid = pid;
-                args = args.Skip(1).ToArray();
-            }
-        }
-
+        
         private void ParseJobType(ref string[] args)
         {
             if (!args.Any()) return;
