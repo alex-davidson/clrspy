@@ -18,7 +18,7 @@ namespace ClrSpy.Architecture
             var thunk = typeof(x86Thunk.Program).Assembly.Location;
             // This is ridiculous. Why does the API not simply accept a list of argument strings?
             var quotedArguments = new string[] { executablePath }.Concat(originalArgs).Select(o => $"\"{Quote(o)}\"").ToArray();
-
+            
             var info = new ProcessStartInfo(thunk, String.Join(" ", quotedArguments)) {
                 RedirectStandardError = true,
                 RedirectStandardOutput = true,

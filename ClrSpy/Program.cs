@@ -24,7 +24,7 @@ namespace ClrSpy
             try
             {
                 var remaining = options.Parse(args).ToArray();
-                arguments.ParseRemaining(remaining);
+                arguments.ParseRemaining(ref remaining);
                 
                 var console = new ConsoleLog(Console.Error, arguments.Verbose);
                 var job = new DebugJobFactory(new ProcessFinder()).Create(arguments, console);
@@ -95,7 +95,7 @@ namespace ClrSpy
         public static Options CreateOptions(Arguments arguments)
         {
             return new Options {
-                { "x|exclusive", "Pause the target process while reading its state. Required for obtaining heap information.", o => arguments.PauseTargetProcess = true },
+                { "x|exclusive", "Attach to the target process while reading its state, instead of passively observing it. Required for obtaining heap information.", o => arguments.ActivelyAttachToProcess = true },
                 { "v|verbose", "Increase logging verbosity.", o => arguments.Verbose = true },
                 { "p=|pid=|process-id=", "PID of the target process.", (int o) => arguments.Pid = o },
                 { "n=|name=|process-name=", "Name of the target process.", o => arguments.ProcessName = o },

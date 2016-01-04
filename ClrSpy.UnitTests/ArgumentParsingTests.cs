@@ -45,7 +45,7 @@ namespace ClrSpy.UnitTests
             var arguments = new Arguments();
             var options = Program.CreateOptions(arguments);
             var remaining = options.Parse(args).ToArray();
-            arguments.ParseRemaining(remaining);
+            arguments.ParseRemaining(ref remaining);
             return arguments;
         }
     }

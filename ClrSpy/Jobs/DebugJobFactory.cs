@@ -23,13 +23,13 @@ namespace ClrSpy.Jobs
             {
                 case JobType.DumpStacks:
                     {
-                        return new DumpStacksJob(process, arguments.PauseTargetProcess);
+                        return new DumpStacksJob(process, arguments.ActivelyAttachToProcess);
                     }
 
                 case JobType.DumpHeap:
                     {
-                        if(!arguments.PauseTargetProcess) throw new ErrorWithExitCodeException(1, "The -x switch is required in order to dump heap information.") { ShowUsage = true };
-                        return new DumpHeapJob(process, arguments.PauseTargetProcess);
+                        if(!arguments.ActivelyAttachToProcess) throw new ErrorWithExitCodeException(1, "The -x switch is required in order to dump heap information.") { ShowUsage = true };
+                        return new DumpHeapJob(process, arguments.ActivelyAttachToProcess);
                     }
                     
                 default:
