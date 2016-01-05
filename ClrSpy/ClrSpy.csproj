@@ -59,9 +59,13 @@
     <Compile Include="Architecture\ProcessArchitecture.cs" />
     <Compile Include="Arguments.cs" />
     <Compile Include="CliSupport\Column.cs" />
+    <Compile Include="CliSupport\ConsoleEvents.cs" />
     <Compile Include="CliSupport\ConsoleLog.cs" />
     <Compile Include="CliSupport\ErrorWithExitCodeException.cs" />
+    <Compile Include="CliSupport\ForcedTerminationMonitor.cs" />
+    <Compile Include="CliSupport\ICancellationEvents.cs" />
     <Compile Include="CliSupport\Tabulator.cs" />
+    <Compile Include="CliSupport\TerminationReason.cs" />
     <Compile Include="Configuration\ProcessListDescriber.cs" />
     <Compile Include="Debugger\DebugSession.cs" />
     <Compile Include="Jobs\DumpHeapJob.cs" />
