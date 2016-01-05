@@ -67,6 +67,7 @@
     <Compile Include="CliSupport\Tabulator.cs" />
     <Compile Include="CliSupport\TerminationReason.cs" />
     <Compile Include="Configuration\ProcessListDescriber.cs" />
+    <Compile Include="Debugger\DebugMode.cs" />
     <Compile Include="Debugger\DebugSession.cs" />
     <Compile Include="Jobs\DumpHeapJob.cs" />
     <Compile Include="Configuration\DumpHeapJobFactory.cs" />

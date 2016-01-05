@@ -60,7 +60,7 @@ namespace ClrSpy.Jobs
 
         private IList<RawTypeInfo> CollectHeapInfo()
         {
-            using (var session = DebugSession.Create(process, true))
+            using (var session = DebugSession.Create(process, DebugMode.Snapshot))
             {
                 var runtime = session.CreateRuntime();
                 var heap = runtime.GetHeap();

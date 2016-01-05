@@ -23,7 +23,7 @@ namespace ClrSpy.Jobs
 
         public void Run(TextWriter output, ConsoleLog console)
         {
-            using (var session = DebugSession.Create(process, Exclusive))
+            using (var session = DebugSession.Create(process, Exclusive ? DebugMode.Snapshot : DebugMode.Observe))
             {
                 var runtime = session.CreateRuntime();
                 WriteThreadInfo(runtime, output);
