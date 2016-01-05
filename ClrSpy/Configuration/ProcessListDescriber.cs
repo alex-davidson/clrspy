@@ -4,6 +4,7 @@ using System.Linq;
 using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
 using ClrSpy.Processes;
+using x86Thunk;
 
 namespace ClrSpy.Configuration
 {
@@ -33,7 +34,7 @@ namespace ClrSpy.Configuration
                 if(byArchitecture[new ProcessArchitecture.x86()].Any())
                 {
                     // Go to 32-bit and render the rest of the process information.
-                    throw new Requires32BitEnvironmentException();
+                    Bootstrap.RecurseInto32BitProcess();
                 }
             }
         }

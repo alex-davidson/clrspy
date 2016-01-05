@@ -10,6 +10,7 @@ using ClrSpy.Debugger;
 using ClrSpy.Jobs;
 using ClrSpy.Processes;
 using Microsoft.Win32;
+using x86Thunk;
 
 namespace ClrSpy
 {
@@ -40,13 +41,21 @@ namespace ClrSpy
 
                 return 0;
             }
-            catch (Requires32BitEnvironmentException ex)
+            catch (Requires32BitEnvironmentException)
             {
-                return ex.ExecuteIn32BitProcess(GetPathToSelf(), args);
+                return Bootstrap.RecurseInto32BitProcess();
+            }
+            catch (Requires64BitEnvironmentException ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                return 64;
             }
             catch(ErrorWithExitCodeException ex)
             {
-                Console.Error.WriteLine(ex.Message);
+                if(!String.IsNullOrEmpty(ex.Message))
+                {
+                    Console.Error.WriteLine(ex.Message);
+                }
                 if(ex.ShowUsage)
                 {
                     ShowUsage(arguments.JobType, options);
@@ -87,6 +96,7 @@ namespace ClrSpy
             catch(ProcessNotFoundException ex) when(ex.Candidates.Any())
             {
                 new ProcessListDescriber().DescribeCandidateProcesses(ex.Candidates.ToList(), console);
+                if(Bootstrap.WasUsed) throw ErrorWithExitCodeException.Propagate(3);
                 throw new ErrorWithExitCodeException(3, "Please specify a unique process Id using the -p switch.");
             }
             catch(ProcessNotFoundException ex)
@@ -113,7 +123,7 @@ namespace ClrSpy
         private static void ShowUsage(JobType? jobType, Options options)
         {
             var jobFactory = jobType == null ? null : SelectFactory(jobType.Value);
-            var codeBase = GetPathToSelf();
+            var codeBase = Bootstrap.GetEntryAssemblyUri().LocalPath;
             if (jobFactory == null)
             {
                 Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <mode> [options]");
@@ -172,11 +182,6 @@ namespace ClrSpy
                 { "p=|pid=|process-id=", "PID of the target process.", (int o) => arguments.Pid = o },
                 { "n=|name=|process-name=", "Name of the target process.", o => arguments.ProcessName = o },
             };
-        }
-        
-        private static string GetPathToSelf()
-        {
-            return new Uri(Assembly.GetExecutingAssembly().CodeBase).LocalPath;
         }
     }
 }

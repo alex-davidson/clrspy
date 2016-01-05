@@ -27,9 +27,4 @@ namespace x86Thunk
             return (ret == null) ? 0 : (int)ret;
         }
     }
-
-    public static class Bootstrap
-    {
-        public static bool WasUsed {get; internal set; }
-    }
 }
