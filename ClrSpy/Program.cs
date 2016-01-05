@@ -115,6 +115,9 @@ namespace ClrSpy
                 case JobType.DumpHeap:
                     return new DumpHeapJobFactory();
                     
+                case JobType.TraceExceptions:
+                    return new TraceExceptionsJobFactory();
+
                 default:
                     throw new ErrorWithExitCodeException(1, $"Unsupported operation: {jobType}");
             }

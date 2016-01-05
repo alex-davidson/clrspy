@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -67,8 +68,11 @@
     <Compile Include="CliSupport\Tabulator.cs" />
     <Compile Include="CliSupport\TerminationReason.cs" />
     <Compile Include="Configuration\ProcessListDescriber.cs" />
+    <Compile Include="Configuration\TraceExceptionsJobFactory.cs" />
+    <Compile Include="Debugger\DebugEventListenerBase.cs" />
     <Compile Include="Debugger\DebugMode.cs" />
     <Compile Include="Debugger\DebugSession.cs" />
+    <Compile Include="Debugger\Extensions.cs" />
     <Compile Include="Jobs\DumpHeapJob.cs" />
     <Compile Include="Configuration\DumpHeapJobFactory.cs" />
     <Compile Include="Jobs\DumpStacksJob.cs" />
@@ -77,6 +81,12 @@
     <Compile Include="Configuration\ProcessResolver.cs" />
     <Compile Include="Configuration\IDebugJobFactory.cs" />
     <Compile Include="Debugger\NoClrModulesFoundException.cs" />
+    <Compile Include="Jobs\TraceExceptionsJob.cs" />
+    <Compile Include="Debugger\ExceptionRecord.cs" />
+    <Compile Include="Native\DebugEventCallbacksAdapter.cs" />
+    <Compile Include="Debugger\ExceptionCode.cs" />
+    <Compile Include="Native\ExceptionRecordReader.cs" />
+    <Compile Include="Native\WINAPI_Status.cs" />
     <Compile Include="Processes\IProcessFinder.cs" />
     <Compile Include="Processes\IProcessInfo.cs" />
     <Compile Include="Processes\ProcessFinder.cs" />
