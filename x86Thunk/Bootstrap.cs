@@ -18,7 +18,7 @@ namespace x86Thunk
         /// <returns></returns>
         public static int RecurseInto32BitProcess()
         {
-            return ExecuteIn32BitProcess(GetEntryAssemblyUri().LocalPath, Environment.GetCommandLineArgs());
+            return ExecuteIn32BitProcess(GetEntryAssemblyUri().LocalPath, GetCurrentInvocationArguments());
         }
 
         /// <summary>
@@ -28,7 +28,13 @@ namespace x86Thunk
         /// <returns></returns>
         public static int ExecuteIn32BitProcessWithCurrentArguments(string executablePath)
         {
-            return ExecuteIn32BitProcess(executablePath, Environment.GetCommandLineArgs());
+            return ExecuteIn32BitProcess(executablePath, GetCurrentInvocationArguments());
+        }
+
+        private static string[] GetCurrentInvocationArguments()
+        {
+            // First entry is the path by which we were invoked. Should not pass this on.
+            return Environment.GetCommandLineArgs().Skip(1).ToArray();
         }
 
         /// <summary>
