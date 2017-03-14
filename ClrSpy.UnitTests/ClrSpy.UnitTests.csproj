@@ -57,6 +57,8 @@
     <Compile Include="Configuration\ShowHeapJobFactoryValidationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticsTests.cs" />
+    <Compile Include="Utils\CommandLineUtils.cs" />
+    <Compile Include="Utils\ProcessWrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
