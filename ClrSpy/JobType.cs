@@ -5,6 +5,7 @@
         Invalid = 0, // default
         ShowStacks = 1,
         ShowHeap = 2,
-        DumpMemory = 3
+        DumpMemory = 3,
+        ShowTasks = 4
     }
 }

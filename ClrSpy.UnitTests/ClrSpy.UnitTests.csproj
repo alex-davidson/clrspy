@@ -60,6 +60,7 @@
     <Compile Include="Configuration\ProcessResolverTests.cs" />
     <Compile Include="Configuration\ShowStacksJobFactoryValidationTests.cs" />
     <Compile Include="Configuration\ShowHeapJobFactoryValidationTests.cs" />
+    <Compile Include="Configuration\ShowTasksJobFactoryValidationTests.cs" />
     <Compile Include="HeapAnalysis\Collections\HeapIndexTests.cs" />
     <Compile Include="HeapAnalysis\Collections\ObjectAddressSetTests.cs" />
     <Compile Include="HeapAnalysis\Inspectors\DelegateInspectorTests.cs" />
