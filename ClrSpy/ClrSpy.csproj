@@ -87,6 +87,7 @@
     <Compile Include="Configuration\ShowHeapJobFactory.cs" />
     <Compile Include="Jobs\ShowStacksJob.cs" />
     <Compile Include="Configuration\ShowStacksJobFactory.cs" />
+    <Compile Include="Configuration\ShowTasksJobFactory.cs" />
     <Compile Include="HeapAnalysis\Model\ClrArrayObject.cs" />
     <Compile Include="HeapAnalysis\Model\ClrObjectUtils.cs" />
     <Compile Include="HeapAnalysis\Model\ClrReferenceObject.cs" />
@@ -103,6 +104,7 @@
     <Compile Include="HeapAnalysis\Model\IClrCompositeObject.cs" />
     <Compile Include="HeapAnalysis\Collections\HeapIndex.cs" />
     <Compile Include="HeapAnalysis\Collections\ObjectAddressSet.cs" />
+    <Compile Include="Jobs\ShowTasksJob.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
     <Compile Include="Configuration\ProcessResolver.cs" />
     <Compile Include="Configuration\IDebugJobFactory.cs" />

@@ -38,6 +38,14 @@ namespace ClrSpy.UnitTests
 
             Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
         }
+        
+        [Test]
+        public void ShowTasksJobTypeAndPidSwitchAreParsedAsSuch()
+        {
+            var parsed = AssertParsedAs<ShowTasksJobFactory>("showtasks", "-p", "1234");
+
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
+        }
 
         [Test]
         public void DumpMemoryJobTypeAndPidSwitchAreParsedAsSuch()
