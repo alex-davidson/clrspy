@@ -41,6 +41,15 @@ namespace ClrSpy.Debugger
             return control;
         }
 
+        public static IDebugAdvanced GetDebuggerAdvanced(this DataTarget debugger)
+        {
+            if (debugger.DebuggerInterface == null) throw new InvalidOperationException("The DataTarget does not support live debugging.");
+            // ReSharper disable once SuspiciousTypeConversion.Global
+            var advanced = debugger.DebuggerInterface as IDebugAdvanced;
+            if (advanced == null) throw new InvalidOperationException("The IDebugClient instance does not implement IDebugAdvanced.");
+            return advanced;
+        }
+
         public static IDebugClient5 GetDebuggerInterface(this DataTarget debugger)
         {
             if (debugger.DebuggerInterface == null) throw new InvalidOperationException("The DataTarget does not support live debugging.");

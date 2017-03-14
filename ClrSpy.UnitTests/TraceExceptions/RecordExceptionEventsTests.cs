@@ -33,7 +33,14 @@ namespace ClrSpy.UnitTests.TraceExceptions
 
                     while(session.DataTarget.RunCallbacks(cts.Token))
                     {
-                        session.DataTarget.ResumeExecution();
+                        if (cts.Token.IsCancellationRequested) break;
+
+                        var status = session.DataTarget.GetExecutionStatus();
+
+                        var adv = session.DataTarget.DebuggerInterface as IDebugAdvanced;
+                        var runtime = session.CreateRuntime();
+                        
+                        //session.DataTarget.ResumeExecution();
                     }
                 }
             }
@@ -65,7 +72,7 @@ namespace ClrSpy.UnitTests.TraceExceptions
                 if (exception.Code == ExceptionCode.ClrDbgNotificationExceptionCode) return DEBUG_STATUS.NO_CHANGE; // Something to do with process initialisation.
                 if (exception.Code == ExceptionCode.Breakpoint) return DEBUG_STATUS.BREAK; // I have no idea where this comes from.
                 Exceptions.Add(exception);
-                return DEBUG_STATUS.NO_CHANGE;
+                return DEBUG_STATUS.BREAK;
             }
 
             public override DEBUG_STATUS OnExitProcess(DataTarget debugger, uint exitCode)
