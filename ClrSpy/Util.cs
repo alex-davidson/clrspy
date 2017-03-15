@@ -1,4 +1,6 @@
-﻿namespace ClrSpy
+﻿using System.Collections.Generic;
+
+namespace ClrSpy
 {
     public static class Util
     {
@@ -12,6 +14,14 @@
         public static long InKilobytes(this long bytes)
         {
             return (bytes + 1023) / 1024;
+        }
+
+        public static T RemoveLast<T>(this IList<T> list)
+        {
+            var lastIndex = list.Count - 1;
+            var item = list[lastIndex];
+            list.RemoveAt(lastIndex);
+            return item;
         }
     }
 }
