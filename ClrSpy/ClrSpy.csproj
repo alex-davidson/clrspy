@@ -82,7 +82,11 @@
     <Compile Include="HeapAnalysis\StructuredTypeFactory.cs" />
     <Compile Include="HeapAnalysis\Inspectors\DelegateInspector.cs" />
     <Compile Include="HeapAnalysis\Model\ClrMethodEqualityComparer.cs" />
+    <Compile Include="HeapAnalysis\Inspectors\ContinuationInspector.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrTaskContinuationClassifier.cs" />
+    <Compile Include="HeapAnalysis\Inspectors\ContinuationDetails.cs" />
     <Compile Include="Jobs\DumpMemoryJob.cs" />
+    <Compile Include="Jobs\IndentedLineWriter.cs" />
     <Compile Include="Jobs\ShowHeapJob.cs" />
     <Compile Include="Configuration\ShowHeapJobFactory.cs" />
     <Compile Include="Jobs\ShowStacksJob.cs" />
@@ -104,6 +108,10 @@
     <Compile Include="HeapAnalysis\Model\IClrCompositeObject.cs" />
     <Compile Include="HeapAnalysis\Collections\HeapIndex.cs" />
     <Compile Include="HeapAnalysis\Collections\ObjectAddressSet.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrHeapTaskAnalyser.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrHeapTaskContinuationExplorer.cs" />
+    <Compile Include="HeapAnalysis\Tasks\IContinuationCollector.cs" />
+    <Compile Include="HeapAnalysis\Tasks\TaskGraph.cs" />
     <Compile Include="Jobs\ShowTasksJob.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
     <Compile Include="Configuration\ProcessResolver.cs" />

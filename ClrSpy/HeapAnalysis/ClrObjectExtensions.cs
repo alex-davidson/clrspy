@@ -18,6 +18,7 @@ namespace ClrSpy.HeapAnalysis
         public static T GetElement<T>(this ClrArrayObject arrayObject, int index)
         {
             var value = arrayObject.GetElement(index);
+            if (Equals(default(T), value)) return default(T);
             if (TryCastAs(value, out T result)) return result;
             throw new InvalidCastException($"Element {index} of this {arrayObject} cannot be accessed as a {typeof(T).Name}");
         }
