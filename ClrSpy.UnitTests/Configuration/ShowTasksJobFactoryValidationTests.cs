@@ -16,7 +16,7 @@ namespace ClrSpy.UnitTests.Configuration
 
             var exception = Assert.Throws<ErrorWithExitCodeException>(() => jobFactory.Validate());
 
-            Assert.That(exception.Message, Is.StringContaining("-x switch is required"));
+            Assert.That(exception.Message, Does.Contain("-x switch is required"));
         }
 
         [Test]

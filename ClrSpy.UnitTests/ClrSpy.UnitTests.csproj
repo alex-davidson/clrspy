@@ -75,6 +75,9 @@
     <Compile Include="HeapAnalysis\Model\SameTypeFieldTests.cs" />
     <Compile Include="HeapAnalysis\StructuredTypeFactoryTests.cs" />
     <Compile Include="Native\PointerUtilsTests.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrHeapTaskAnalyserTests.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ContinuationTypeMatcher.cs" />
+    <Compile Include="HeapAnalysis\Tasks\AsyncTaskTargetProcess.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticsTests.cs" />
     <Compile Include="Utils\CommandLineUtils.cs" />
@@ -87,6 +90,14 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj">
+      <Project>{6e51e27b-1d89-49e9-a610-3c153bfca7a9}</Project>
+      <Name>ClrSpy.UnitTests.HeapAnalysisTarget</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ClrSpy.UnitTests.AsyncTaskTarget\ClrSpy.UnitTests.AsyncTaskTarget.csproj">
+      <Project>{d49ea359-52ec-458c-8f60-8526ca896af2}</Project>
+      <Name>ClrSpy.UnitTests.AsyncTaskTarget</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj">
       <Project>{6e51e27b-1d89-49e9-a610-3c153bfca7a9}</Project>
       <Name>ClrSpy.UnitTests.HeapAnalysisTarget</Name>

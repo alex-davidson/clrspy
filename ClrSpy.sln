@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests", "ClrSpy.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests.HeapAnalysisTarget", "ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj", "{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests.AsyncTaskTarget", "ClrSpy.UnitTests.AsyncTaskTarget\ClrSpy.UnitTests.AsyncTaskTarget.csproj", "{D49EA359-52EC-458C-8F60-8526CA896AF2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D49EA359-52EC-458C-8F60-8526CA896AF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D49EA359-52EC-458C-8F60-8526CA896AF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D49EA359-52EC-458C-8F60-8526CA896AF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D49EA359-52EC-458C-8F60-8526CA896AF2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

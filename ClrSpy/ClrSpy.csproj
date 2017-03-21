@@ -104,6 +104,11 @@
     <Compile Include="HeapAnalysis\Model\IClrCompositeObject.cs" />
     <Compile Include="HeapAnalysis\Collections\HeapIndex.cs" />
     <Compile Include="HeapAnalysis\Collections\ObjectAddressSet.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrHeapTaskAnalyser.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrHeapTaskContinuationExplorer.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrObjectTaskExtensions.cs" />
+    <Compile Include="HeapAnalysis\Tasks\IContinuationCollector.cs" />
+    <Compile Include="HeapAnalysis\Tasks\TaskGraph.cs" />
     <Compile Include="Jobs\ShowTasksJob.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
     <Compile Include="Configuration\ProcessResolver.cs" />
