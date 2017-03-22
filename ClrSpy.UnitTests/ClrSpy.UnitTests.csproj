@@ -60,6 +60,8 @@
     <Compile Include="Configuration\ProcessResolverTests.cs" />
     <Compile Include="Configuration\ShowStacksJobFactoryValidationTests.cs" />
     <Compile Include="Configuration\ShowHeapJobFactoryValidationTests.cs" />
+    <Compile Include="HeapAnalysis\Collections\HeapIndexTests.cs" />
+    <Compile Include="HeapAnalysis\Collections\ObjectAddressSetTests.cs" />
     <Compile Include="HeapAnalysis\Model\ArrayTests.cs" />
     <Compile Include="HeapAnalysis\Model\HeapEnumerationTests.cs" />
     <Compile Include="HeapAnalysis\Model\LocalVarTests.cs" />
@@ -74,6 +76,7 @@
     <Compile Include="Utils\CommandLineUtils.cs" />
     <Compile Include="Utils\DisposableTracker.cs" />
     <Compile Include="Utils\ProcessWrapper.cs" />
+    <Compile Include="Utils\RandomSeed.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

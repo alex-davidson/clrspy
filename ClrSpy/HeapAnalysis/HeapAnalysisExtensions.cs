@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using ClrSpy.HeapAnalysis.Collections;
 using ClrSpy.HeapAnalysis.Model;
 using Microsoft.Diagnostics.Runtime;
 
@@ -34,9 +35,10 @@ namespace ClrSpy.HeapAnalysis
             public LiveObjectWalker(ClrHeap heap)
             {
                 this.heap = heap;
+                visited = new ObjectAddressSet(heap);
             }
 
-            private readonly HashSet<ulong> visited = new HashSet<ulong>();
+            private readonly ObjectAddressSet visited;
             private readonly Stack<ulong> pending = new Stack<ulong>();
 
             public IEnumerable<IClrObject> ExploreFromRoots()
@@ -45,10 +47,10 @@ namespace ClrSpy.HeapAnalysis
 
                 foreach (var root in heap.EnumerateRoots())
                 {
+                    if (root.Object == 0) continue;
                     if (!visited.Add(root.Object)) continue;
                     if (root.Kind == GCRootKind.Finalizer) continue;
                     if (root.Address == 0) continue;
-                    if (root.Object == 0) continue;
                     if (!reader.IsValidObjectType(root.Type)) continue;
 
                     yield return reader.ReadGCRoot(root);

@@ -99,6 +99,8 @@
     <Compile Include="HeapAnalysis\Model\ClrStructObject.cs" />
     <Compile Include="HeapAnalysis\HeapAnalysisExtensions.cs" />
     <Compile Include="HeapAnalysis\Model\IClrCompositeObject.cs" />
+    <Compile Include="HeapAnalysis\Collections\HeapIndex.cs" />
+    <Compile Include="HeapAnalysis\Collections\ObjectAddressSet.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
     <Compile Include="Configuration\ProcessResolver.cs" />
     <Compile Include="Configuration\IDebugJobFactory.cs" />
