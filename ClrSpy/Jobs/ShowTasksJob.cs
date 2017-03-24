@@ -33,6 +33,7 @@ namespace ClrSpy.Jobs
                     {
                         output.WriteLine($"    {DescribeContinuation(graph, continuation)}");
                     }
+                    output.WriteLine();
                 }
             }
             console.WriteLine("Not implemented.");
@@ -40,7 +41,7 @@ namespace ClrSpy.Jobs
         
         private string DescribeObject(IClrCompositeObject obj)
         {
-            return $"{obj.Type.Name} @ {obj.Address}";
+            return $"{obj.Type.Name} @ {obj.Address:X16}";
         }
 
         private string DescribeTask(ClrClassObject task)

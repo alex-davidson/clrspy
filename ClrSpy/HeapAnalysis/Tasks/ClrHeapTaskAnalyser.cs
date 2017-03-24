@@ -18,7 +18,6 @@ namespace ClrSpy.HeapAnalysis.Tasks
             var explorer = new ClrHeapTaskContinuationExplorer();
             foreach (var taskObj in heap.EnumerateLiveClrObjects().OfTaskType())
             {
-                tasks.AddVertex(taskObj);
                 var collector = new ContinuationCollector(tasks, taskObj);
                 explorer.CollectContinuationsFromTask(taskObj, collector);
             }
