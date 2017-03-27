@@ -4,6 +4,7 @@
     {
         Invalid = 0, // default
         ShowStacks = 1,
-        ShowHeap = 2
+        ShowHeap = 2,
+        DumpMemory = 3
     }
 }
