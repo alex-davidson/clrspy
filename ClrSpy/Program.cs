@@ -28,7 +28,7 @@ namespace ClrSpy
                 arguments.ParseRemaining(ref remainingArgs);
 
                 var console = new ConsoleLog(Console.Error, arguments.Verbose);
-                var jobFactory = SelectFactory(arguments.JobType ?? JobType.DumpStacks);
+                var jobFactory = SelectFactory(arguments.JobType ?? JobType.ShowStacks);
                 if (jobFactory == null) throw new ErrorWithExitCodeException(1, $"Unsupported operation: {arguments.JobType}") { ShowUsage = true };
 
                 var configuredFactory = jobFactory.Configure(ref remainingArgs, arguments.ActivelyAttachToProcess);
@@ -109,11 +109,11 @@ namespace ClrSpy
         {
             switch(jobType)
             {
-                case JobType.DumpStacks:
-                    return new DumpStacksJobFactory();
+                case JobType.ShowStacks:
+                    return new ShowStacksJobFactory();
 
-                case JobType.DumpHeap:
-                    return new DumpHeapJobFactory();
+                case JobType.ShowHeap:
+                    return new ShowHeapJobFactory();
                     
                 default:
                     throw new ErrorWithExitCodeException(1, $"Unsupported operation: {jobType}");
@@ -127,7 +127,7 @@ namespace ClrSpy
             if (jobFactory == null)
             {
                 Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <mode> [options]");
-                Console.Error.WriteLine("  where mode is one of: dumpstacks, dumpheap");
+                Console.Error.WriteLine("  where mode is one of: showstacks, showheap");
             }
             else
             {

@@ -7,27 +7,45 @@ namespace ClrSpy.UnitTests
     public class ArgumentParsingTests
     {
         [Test]
-        public void DumpStacksJobTypeAndPidSwitchAreParsedAsSuch()
+        public void DumpStacksJobTypeAndPidSwitchAreParsedAsShowStacksJob()
         {
             var parsed = Parse("dumpstacks", "-p", "1234");
 
             Assert.That(parsed.Pid, Is.EqualTo(1234));
-            Assert.That(parsed.JobType, Is.EqualTo(JobType.DumpStacks));
+            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowStacks));
         }
-        
+
         [Test]
-        public void DumpHeapJobTypeAndPidSwitchAreParsedAsSuch()
+        public void ShowStacksJobTypeAndPidSwitchAreParsedAsSuch()
+        {
+            var parsed = Parse("showstacks", "-p", "1234");
+
+            Assert.That(parsed.Pid, Is.EqualTo(1234));
+            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowStacks));
+        }
+
+        [Test]
+        public void DumpHeapJobTypeAndPidSwitchAreParsedAsShowHeapJob()
         {
             var parsed = Parse("dumpheap", "-p", "1234");
 
             Assert.That(parsed.Pid, Is.EqualTo(1234));
-            Assert.That(parsed.JobType, Is.EqualTo(JobType.DumpHeap));
+            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowHeap));
+        }
+        
+        [Test]
+        public void ShowHeapJobTypeAndPidSwitchAreParsedAsSuch()
+        {
+            var parsed = Parse("showheap", "-p", "1234");
+
+            Assert.That(parsed.Pid, Is.EqualTo(1234));
+            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowHeap));
         }
 
         [Test]
         public void CanSpecifyProcessByName()
         {
-            var parsed = Parse("dumpstacks", "-n", "process.exe");
+            var parsed = Parse("showstacks", "-n", "process.exe");
 
             Assert.That(parsed.ProcessName, Is.EqualTo("process.exe"));
         }

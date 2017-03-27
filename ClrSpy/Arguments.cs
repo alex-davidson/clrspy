@@ -27,10 +27,25 @@ namespace ClrSpy
             if (!args.Any()) return;
 
             JobType jobType;
-            if (Enum.TryParse(args.First(), true, out jobType))
+            if (TryInterpretAsJobType(args.First(), out jobType))
             {
                 JobType = jobType;
                 args = args.Skip(1).ToArray();
+            }
+        }
+
+        private static bool TryInterpretAsJobType(string arg, out JobType jobType)
+        {
+            switch (arg.ToLower())
+            {
+                case "dumpstacks":
+                    jobType = ClrSpy.JobType.ShowStacks;
+                    return true;
+                case "dumpheap":
+                    jobType = ClrSpy.JobType.ShowHeap;
+                    return true;
+                default:
+                    return Enum.TryParse(arg, true, out jobType);
             }
         }
     }

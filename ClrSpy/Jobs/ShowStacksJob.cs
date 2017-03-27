@@ -6,19 +6,19 @@ using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Jobs
 {
-    public class DumpStacksJob : IDebugJob
+    public class ShowStacksJob : IDebugJob
     {
         private readonly IProcessInfo process;
         public int Pid => process.Pid;
         public bool Exclusive { get; }
 
-        public bool DumpStackObjects { get; set; }
+        public bool ShowStackObjects { get; set; }
 
-        public DumpStacksJob(IProcessInfo process, bool exclusive)
+        public ShowStacksJob(IProcessInfo process, bool exclusive)
         {
             this.process = process;
             this.Exclusive = exclusive;
-            DumpStackObjects = exclusive;
+            ShowStackObjects = exclusive;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
@@ -51,7 +51,7 @@ namespace ClrSpy.Jobs
                 WriteStackTrace(thread, output);
 
                 // Print a !DumpStackObjects equivalent.
-                if (DumpStackObjects)
+                if (ShowStackObjects)
                 {
                     output.WriteLine();
                     WriteStackObjects(runtime, thread, output);

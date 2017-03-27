@@ -4,7 +4,7 @@ using ClrSpy.Processes;
 
 namespace ClrSpy.Configuration
 {
-    public class DumpStacksJobFactory : IDebugJobFactory
+    public class ShowStacksJobFactory : IDebugJobFactory
     {
         public bool ActivelyAttachToProcess { get; private set; }
 
@@ -14,12 +14,12 @@ namespace ClrSpy.Configuration
 
         public IDebugJobFactory Configure(ref string[] jobSpecificArgs, bool activelyAttachToProcess)
         {
-            return new DumpStacksJobFactory { ActivelyAttachToProcess = activelyAttachToProcess };
+            return new ShowStacksJobFactory { ActivelyAttachToProcess = activelyAttachToProcess };
         }
 
         public IDebugJob CreateJob(IProcessInfo process)
         {
-            return new DumpStacksJob(process, ActivelyAttachToProcess);
+            return new ShowStacksJob(process, ActivelyAttachToProcess);
         }
     }
 }

@@ -69,10 +69,10 @@
     <Compile Include="Configuration\ProcessListDescriber.cs" />
     <Compile Include="Debugger\DebugMode.cs" />
     <Compile Include="Debugger\DebugSession.cs" />
-    <Compile Include="Jobs\DumpHeapJob.cs" />
-    <Compile Include="Configuration\DumpHeapJobFactory.cs" />
-    <Compile Include="Jobs\DumpStacksJob.cs" />
-    <Compile Include="Configuration\DumpStacksJobFactory.cs" />
+    <Compile Include="Jobs\ShowHeapJob.cs" />
+    <Compile Include="Configuration\ShowHeapJobFactory.cs" />
+    <Compile Include="Jobs\ShowStacksJob.cs" />
+    <Compile Include="Configuration\ShowStacksJobFactory.cs" />
     <Compile Include="Jobs\IDebugJob.cs" />
     <Compile Include="Configuration\ProcessResolver.cs" />
     <Compile Include="Configuration\IDebugJobFactory.cs" />

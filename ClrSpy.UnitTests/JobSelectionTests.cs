@@ -9,35 +9,35 @@ namespace ClrSpy.UnitTests
     public class JobSelectionTests
     {
         [Test]
-        public void SpecifyingPidSwitch_CreatesDumpStacksJob()
+        public void SpecifyingPidSwitch_CreatesShowStacksJob()
         {
             var factory = ParseAndCreateJob("-p", "1234");
             
-            Assert.That(factory, Is.InstanceOf<DumpStacksJobFactory>());
+            Assert.That(factory, Is.InstanceOf<ShowStacksJobFactory>());
         }
 
         [Test]
-        public void SpecifyingDumpStacksJobWithPidSwitch_CreatesDumpStacksJob()
+        public void SpecifyingShowStacksJobWithPidSwitch_CreatesShowStacksJob()
         {
-            var factory = ParseAndCreateJob("dumpstacks", "-p", "1234");
+            var factory = ParseAndCreateJob("showstacks", "-p", "1234");
             
-            Assert.That(factory, Is.InstanceOf<DumpStacksJobFactory>());
+            Assert.That(factory, Is.InstanceOf<ShowStacksJobFactory>());
         }
         
         [Test]
-        public void SpecifyingDumpHeapJobWithPidSwitchButNoExclusiveSwitch_ThrowsException()
+        public void SpecifyingShowHeapJobWithPidSwitchButNoExclusiveSwitch_ThrowsException()
         {
-            var exception = Assert.Throws<ErrorWithExitCodeException>(() => ParseAndCreateJob("dumpheap", "-p", "1234"));
+            var exception = Assert.Throws<ErrorWithExitCodeException>(() => ParseAndCreateJob("showheap", "-p", "1234"));
             
             Assert.That(exception.Message, Is.StringContaining("-x switch is required"));
         }
 
         [Test]
-        public void SpecifyingDumpHeapJobWithPidSwitchAndExclusiveSwitch_DeclaresDumpHeapJob()
+        public void SpecifyingShowHeapJobWithPidSwitchAndExclusiveSwitch_DeclaresShowHeapJob()
         {
-            var factory = ParseAndCreateJob("dumpheap", "-x", "-p", "1234");
+            var factory = ParseAndCreateJob("showheap", "-x", "-p", "1234");
             
-            Assert.That(factory, Is.InstanceOf<DumpHeapJobFactory>());
+            Assert.That(factory, Is.InstanceOf<ShowHeapJobFactory>());
         }
         
         private static IDebugJobFactory ParseAndCreateJob(params string[] args)
@@ -46,7 +46,7 @@ namespace ClrSpy.UnitTests
             var options = Program.CreateOptions(arguments);
             var remainingArgs = options.Parse(args).ToArray();
             arguments.ParseRemaining(ref remainingArgs);
-            var jobFactory = Program.SelectFactory(arguments.JobType ?? JobType.DumpStacks);
+            var jobFactory = Program.SelectFactory(arguments.JobType ?? JobType.ShowStacks);
             return jobFactory.Configure(ref remainingArgs, arguments.ActivelyAttachToProcess);
         }
     }

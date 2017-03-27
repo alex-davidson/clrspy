@@ -8,12 +8,12 @@ using ClrSpy.Processes;
 
 namespace ClrSpy.Jobs
 {
-    public class DumpHeapJob : IDebugJob
+    public class ShowHeapJob : IDebugJob
     {
         private readonly IProcessInfo process;
         public int Pid => process.Pid;
 
-        public DumpHeapJob(IProcessInfo process)
+        public ShowHeapJob(IProcessInfo process)
         {
             this.process = process;
         }
