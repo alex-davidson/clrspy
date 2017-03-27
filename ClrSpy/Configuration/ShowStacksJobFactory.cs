@@ -1,25 +1,23 @@
+using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
 using ClrSpy.Jobs;
-using ClrSpy.Processes;
 
 namespace ClrSpy.Configuration
 {
     public class ShowStacksJobFactory : IDebugJobFactory
     {
-        public bool ActivelyAttachToProcess { get; private set; }
+        public RunningProcessArguments RunningProcess { get; } = new RunningProcessArguments();
 
-        public void AddOptionDefinitions(Options options)
+        void IReceiveOptions.ReceiveFrom(Options options) => RunningProcess.ReceiveFrom(options);
+
+        public void Validate()
         {
         }
 
-        public IDebugJobFactory Configure(ref string[] jobSpecificArgs, bool activelyAttachToProcess)
+        public IDebugJob CreateJob(ConsoleLog console)
         {
-            return new ShowStacksJobFactory { ActivelyAttachToProcess = activelyAttachToProcess };
-        }
-
-        public IDebugJob CreateJob(IProcessInfo process)
-        {
-            return new ShowStacksJob(process, ActivelyAttachToProcess);
+            var process = JobFactoryHelpers.TryResolveTargetProcess(RunningProcess, console);
+            return new ShowStacksJob(process, RunningProcess.SuspendProcess);
         }
     }
 }

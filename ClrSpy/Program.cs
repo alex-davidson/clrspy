@@ -8,7 +8,6 @@ using ClrSpy.CliSupport.ThirdParty;
 using ClrSpy.Configuration;
 using ClrSpy.Debugger;
 using ClrSpy.Jobs;
-using ClrSpy.Processes;
 using Microsoft.Win32;
 using x86Thunk;
 
@@ -19,22 +18,17 @@ namespace ClrSpy
         public static int Main(string[] args)
         {
             if (!AssertSufficientDotNetVersion()) return 255;
-            
-            var arguments = new Arguments();
-            var options = CreateOptions(arguments);
+
+            var options = new Options();
+            var mainArguments = options.AddCollector(new Arguments());
             try
             {
-                var remainingArgs = options.Parse(args).ToArray();
-                arguments.ParseRemaining(ref remainingArgs);
+                var jobFactory = ParseArguments(options, mainArguments, args);
+                var console = new ConsoleLog(Console.Error, mainArguments.Verbose);
 
-                var console = new ConsoleLog(Console.Error, arguments.Verbose);
-                var jobFactory = SelectFactory(arguments.JobType ?? JobType.ShowStacks);
-                if (jobFactory == null) throw new ErrorWithExitCodeException(1, $"Unsupported operation: {arguments.JobType}") { ShowUsage = true };
+                jobFactory.Validate();
 
-                var configuredFactory = jobFactory.Configure(ref remainingArgs, arguments.ActivelyAttachToProcess);
-
-                var process = ResolveTargetProcess(arguments, console);
-                var job = configuredFactory.CreateJob(process);
+                var job = jobFactory.CreateJob(console);
 
                 console.WriteLineVerbose($"Running as a {ProcessArchitecture.FromCurrentProcess().Describe()} process.");
                 ExecuteJob(console, job);
@@ -58,7 +52,7 @@ namespace ClrSpy
                 }
                 if(ex.ShowUsage)
                 {
-                    ShowUsage(arguments.JobType, options);
+                    ShowUsage(mainArguments.JobType, options);
                 }
                 return ex.ExitCode;
             }
@@ -70,6 +64,22 @@ namespace ClrSpy
             }
         }
 
+        public static IDebugJobFactory ParseArguments(Options options, Arguments mainArguments, string[] args)
+        {
+            mainArguments.JobType = new JobTypeParser().ParseJobTypeInPlace(ref args);
+            var jobFactory = SelectFactory(mainArguments.JobType ?? JobType.ShowStacks);
+            if (jobFactory == null) throw new ErrorWithExitCodeException(1, $"Unsupported operation: {mainArguments.JobType}") {ShowUsage = true};
+
+            options.AddCollector(jobFactory);
+
+            var remainingArgs = options.Parse(args).ToArray();
+            if (remainingArgs.Any())
+            {
+                throw new ErrorWithExitCodeException(1, $"Unrecognised arguments: {String.Join(" ", remainingArgs)}");
+            }
+            return jobFactory;
+        }
+
         private static void ExecuteJob(ConsoleLog console, IDebugJob job)
         {
             try
@@ -79,29 +89,6 @@ namespace ClrSpy
             catch (NoClrModulesFoundException ex)
             {
                 throw new ErrorWithExitCodeException(2, ex);
-            }
-        }
-
-        private static IProcessInfo ResolveTargetProcess(Arguments arguments, ConsoleLog console)
-        {
-            var processResolver = new ProcessResolver(new ProcessFinder());
-            try
-            {
-                return processResolver.ResolveTargetProcess(arguments.Pid, arguments.ProcessName);
-            }
-            catch(ProcessNotSpecifiedException ex)
-            {
-                throw new ErrorWithExitCodeException(1, ex.Message) { ShowUsage = true };
-            }
-            catch(ProcessNotFoundException ex) when(ex.Candidates.Any())
-            {
-                new ProcessListDescriber().DescribeCandidateProcesses(ex.Candidates.ToList(), console);
-                if(Bootstrap.WasUsed) throw ErrorWithExitCodeException.Propagate(3);
-                throw new ErrorWithExitCodeException(3, "Please specify a unique process Id using the -p switch.");
-            }
-            catch(ProcessNotFoundException ex)
-            {
-                throw new ErrorWithExitCodeException(3, ex.Message);
             }
         }
         
@@ -133,7 +120,6 @@ namespace ClrSpy
             {
                 var convenientJobTypeString = jobType.ToString().ToLower();
                 Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} {convenientJobTypeString} [options]");
-                jobFactory.AddOptionDefinitions(options);
             }
             options.WriteOptionDescriptions(Console.Error);
         }
@@ -174,14 +160,15 @@ namespace ClrSpy
             }
         }
 
-        public static Options CreateOptions(Arguments arguments)
+        public class Arguments : IReceiveOptions
         {
-            return new Options {
-                { "x|exclusive", "Attach to the target process while reading its state, instead of passively observing it. Required for obtaining heap information.", o => arguments.ActivelyAttachToProcess = true },
-                { "v|verbose", "Increase logging verbosity.", o => arguments.Verbose = true },
-                { "p=|pid=|process-id=", "PID of the target process.", (int o) => arguments.Pid = o },
-                { "n=|name=|process-name=", "Name of the target process.", o => arguments.ProcessName = o },
-            };
+            public bool Verbose { get; set; }
+            public JobType? JobType { get; set; }
+
+            public void ReceiveFrom(Options options)
+            {
+                options.Add("v|verbose", "Increase logging verbosity.", o => Verbose = true);
+            }
         }
     }
 }

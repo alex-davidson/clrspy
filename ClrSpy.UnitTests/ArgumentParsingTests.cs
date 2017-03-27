@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using ClrSpy.CliSupport.ThirdParty;
+using ClrSpy.Configuration;
 using NUnit.Framework;
 
 namespace ClrSpy.UnitTests
@@ -7,56 +8,65 @@ namespace ClrSpy.UnitTests
     public class ArgumentParsingTests
     {
         [Test]
+        public void PidSwitchAloneIsParsedAsShowStacksJob()
+        {
+            var factory = AssertParsedAs<ShowStacksJobFactory>("-p", "1234");
+
+            Assert.That(factory, Is.InstanceOf<ShowStacksJobFactory>());
+        }
+
+        [Test]
         public void DumpStacksJobTypeAndPidSwitchAreParsedAsShowStacksJob()
         {
-            var parsed = Parse("dumpstacks", "-p", "1234");
+            var parsed = AssertParsedAs<ShowStacksJobFactory>("dumpstacks", "-p", "1234");
 
-            Assert.That(parsed.Pid, Is.EqualTo(1234));
-            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowStacks));
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
         }
 
         [Test]
         public void ShowStacksJobTypeAndPidSwitchAreParsedAsSuch()
         {
-            var parsed = Parse("showstacks", "-p", "1234");
+            var parsed = AssertParsedAs<ShowStacksJobFactory>("showstacks", "-p", "1234");
 
-            Assert.That(parsed.Pid, Is.EqualTo(1234));
-            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowStacks));
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
         }
 
         [Test]
         public void DumpHeapJobTypeAndPidSwitchAreParsedAsShowHeapJob()
         {
-            var parsed = Parse("dumpheap", "-p", "1234");
+            var parsed = AssertParsedAs<ShowHeapJobFactory>("dumpheap", "-p", "1234");
 
-            Assert.That(parsed.Pid, Is.EqualTo(1234));
-            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowHeap));
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
         }
-        
+
         [Test]
         public void ShowHeapJobTypeAndPidSwitchAreParsedAsSuch()
         {
-            var parsed = Parse("showheap", "-p", "1234");
+            var parsed = AssertParsedAs<ShowHeapJobFactory>("showheap", "-p", "1234");
 
-            Assert.That(parsed.Pid, Is.EqualTo(1234));
-            Assert.That(parsed.JobType, Is.EqualTo(JobType.ShowHeap));
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
         }
 
         [Test]
         public void CanSpecifyProcessByName()
         {
-            var parsed = Parse("showstacks", "-n", "process.exe");
+            var parsed = AssertParsedAs<ShowStacksJobFactory>("showstacks", "-n", "process.exe");
 
-            Assert.That(parsed.ProcessName, Is.EqualTo("process.exe"));
+            Assert.That(parsed.RunningProcess.Name, Is.EqualTo("process.exe"));
         }
 
-        private static Arguments Parse(params string[] args)
+        private static T AssertParsedAs<T>(params string[] args) where T : IDebugJobFactory
         {
-            var arguments = new Arguments();
-            var options = Program.CreateOptions(arguments);
-            var remaining = options.Parse(args).ToArray();
-            arguments.ParseRemaining(ref remaining);
-            return arguments;
+            var factory = Parse(args);
+            Assert.That(factory, Is.InstanceOf<T>());
+            return (T)factory;
+        }
+
+        private static IDebugJobFactory Parse(params string[] args)
+        {
+            var options = new Options();
+            var arguments = new Program.Arguments();
+            return Program.ParseArguments(options, arguments, args);
         }
     }
 }
