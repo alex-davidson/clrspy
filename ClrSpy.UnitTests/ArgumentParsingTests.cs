@@ -56,7 +56,7 @@ namespace ClrSpy.UnitTests
 
         private static IDebugJobFactory Parse(params string[] args)
         {
-            var options = new Options();
+            var options = new OptionSet();
             var arguments = new Program.Arguments();
             return Program.ParseArguments(options, arguments, args);
         }

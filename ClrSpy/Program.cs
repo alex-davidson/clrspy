@@ -19,7 +19,7 @@ namespace ClrSpy
         {
             if (!AssertSufficientDotNetVersion()) return 255;
 
-            var options = new Options();
+            var options = new OptionSet();
             var mainArguments = options.AddCollector(new Arguments());
             try
             {
@@ -64,7 +64,7 @@ namespace ClrSpy
             }
         }
 
-        public static IDebugJobFactory ParseArguments(Options options, Arguments mainArguments, string[] args)
+        public static IDebugJobFactory ParseArguments(OptionSet options, Arguments mainArguments, string[] args)
         {
             mainArguments.JobType = new JobTypeParser().ParseJobTypeInPlace(ref args);
             if (mainArguments.JobType == null) throw new ErrorWithExitCodeException(1, "") { ShowUsage = true };
@@ -112,7 +112,7 @@ namespace ClrSpy
             }
         }
 
-        private static void ShowUsage(JobType? jobType, Options options)
+        private static void ShowUsage(JobType? jobType, OptionSet options)
         {
             var jobFactory = jobType == null ? null : SelectFactory(jobType.Value);
             var codeBase = Bootstrap.GetEntryAssemblyUri().LocalPath;
@@ -171,7 +171,7 @@ namespace ClrSpy
             public bool ShowUsage { get; set; }
             public JobType? JobType { get; set; }
 
-            public void ReceiveFrom(Options options)
+            public void ReceiveFrom(OptionSet options)
             {
                 options.Add("v|verbose", "Increase logging verbosity.", o => Verbose = true);
                 options.Add("h|?|help", "Show usage information.", o => ShowUsage = true);

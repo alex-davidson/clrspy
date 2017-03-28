@@ -7,6 +7,6 @@ namespace ClrSpy.CliSupport
         /// <summary>
         /// Add argument-parsing information to an Options object.
         /// </summary>
-        void ReceiveFrom(Options options);
+        void ReceiveFrom(OptionSet options);
     }
 }

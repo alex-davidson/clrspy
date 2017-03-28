@@ -8,7 +8,7 @@ namespace ClrSpy.Configuration
     {
         public RunningProcessArguments RunningProcess { get; } = new RunningProcessArguments();
 
-        void IReceiveOptions.ReceiveFrom(Options options) => options.AddCollector(RunningProcess);
+        void IReceiveOptions.ReceiveFrom(OptionSet options) => options.AddCollector(RunningProcess);
 
         public void Validate()
         {
