@@ -8,14 +8,6 @@ namespace ClrSpy.UnitTests
     public class ArgumentParsingTests
     {
         [Test]
-        public void PidSwitchAloneIsParsedAsShowStacksJob()
-        {
-            var factory = AssertParsedAs<ShowStacksJobFactory>("-p", "1234");
-
-            Assert.That(factory, Is.InstanceOf<ShowStacksJobFactory>());
-        }
-
-        [Test]
         public void DumpStacksJobTypeAndPidSwitchAreParsedAsShowStacksJob()
         {
             var parsed = AssertParsedAs<ShowStacksJobFactory>("dumpstacks", "-p", "1234");

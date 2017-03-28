@@ -67,12 +67,17 @@ namespace ClrSpy
         public static IDebugJobFactory ParseArguments(Options options, Arguments mainArguments, string[] args)
         {
             mainArguments.JobType = new JobTypeParser().ParseJobTypeInPlace(ref args);
-            var jobFactory = SelectFactory(mainArguments.JobType ?? JobType.ShowStacks);
+            if (mainArguments.JobType == null) throw new ErrorWithExitCodeException(1, "") { ShowUsage = true };
+            var jobFactory = SelectFactory(mainArguments.JobType.Value);
             if (jobFactory == null) throw new ErrorWithExitCodeException(1, $"Unsupported operation: {mainArguments.JobType}") {ShowUsage = true};
 
             options.AddCollector(jobFactory);
 
             var remainingArgs = options.Parse(args).ToArray();
+            if (mainArguments.ShowUsage)
+            {
+                throw new ErrorWithExitCodeException(1, "") { ShowUsage = true };
+            }
             if (remainingArgs.Any())
             {
                 throw new ErrorWithExitCodeException(1, $"Unrecognised arguments: {String.Join(" ", remainingArgs)}");
@@ -163,11 +168,13 @@ namespace ClrSpy
         public class Arguments : IReceiveOptions
         {
             public bool Verbose { get; set; }
+            public bool ShowUsage { get; set; }
             public JobType? JobType { get; set; }
 
             public void ReceiveFrom(Options options)
             {
                 options.Add("v|verbose", "Increase logging verbosity.", o => Verbose = true);
+                options.Add("h|?|help", "Show usage information.", o => ShowUsage = true);
             }
         }
     }
