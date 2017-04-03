@@ -68,7 +68,9 @@
     <Compile Include="CliSupport\TerminationReason.cs" />
     <Compile Include="Configuration\ProcessListDescriber.cs" />
     <Compile Include="Debugger\DebugMode.cs" />
+    <Compile Include="Debugger\DebugRunningProcess.cs" />
     <Compile Include="Debugger\DebugSession.cs" />
+    <Compile Include="Debugger\IDebugSessionTarget.cs" />
     <Compile Include="CliSupport\IReceiveOptions.cs" />
     <Compile Include="Configuration\JobFactoryHelpers.cs" />
     <Compile Include="Jobs\ShowHeapJob.cs" />

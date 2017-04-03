@@ -1,5 +1,6 @@
 using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
+using ClrSpy.Debugger;
 using ClrSpy.Jobs;
 
 namespace ClrSpy.Configuration
@@ -17,7 +18,8 @@ namespace ClrSpy.Configuration
         public IDebugJob CreateJob(ConsoleLog console)
         {
             var process = JobFactoryHelpers.TryResolveTargetProcess(RunningProcess, console);
-            return new ShowStacksJob(process, RunningProcess.SuspendProcess);
+            var debugTarget = new DebugRunningProcess(process, RunningProcess.SuspendProcess ? DebugMode.Snapshot : DebugMode.Observe);
+            return new ShowStacksJob(debugTarget);
         }
     }
 }
