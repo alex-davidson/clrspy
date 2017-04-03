@@ -4,18 +4,17 @@ using System.IO;
 using ClrSpy.CliSupport;
 using System.Linq;
 using ClrSpy.Debugger;
-using ClrSpy.Processes;
 
 namespace ClrSpy.Jobs
 {
     public class ShowHeapJob : IDebugJob
     {
-        private readonly IProcessInfo process;
-        public int Pid => process.Pid;
+        private readonly IDebugSessionTarget target;
+        public int? Pid => (target as DebugRunningProcess)?.Process.Pid;
 
-        public ShowHeapJob(IProcessInfo process)
+        public ShowHeapJob(IDebugSessionTarget target)
         {
-            this.process = process;
+            this.target = target;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
@@ -60,7 +59,7 @@ namespace ClrSpy.Jobs
 
         private IList<RawTypeInfo> CollectHeapInfo()
         {
-            using (var session = DebugSession.Create(process, DebugMode.Snapshot))
+            using (var session = target.CreateSession())
             {
                 var runtime = session.CreateRuntime();
                 var heap = runtime.GetHeap();

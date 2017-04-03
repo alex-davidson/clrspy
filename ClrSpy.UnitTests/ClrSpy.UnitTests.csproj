@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="ArgumentParsingTests.cs" />
     <Compile Include="CliSupport\TabulatorTests.cs" />
+    <Compile Include="Configuration\DumpMemoryJobFactoryValidationTests.cs" />
     <Compile Include="Configuration\ProcessResolverTests.cs" />
     <Compile Include="Configuration\ShowStacksJobFactoryValidationTests.cs" />
     <Compile Include="Configuration\ShowHeapJobFactoryValidationTests.cs" />

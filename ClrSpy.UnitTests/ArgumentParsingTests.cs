@@ -40,6 +40,24 @@ namespace ClrSpy.UnitTests
         }
 
         [Test]
+        public void DumpMemoryJobTypeAndPidSwitchAreParsedAsSuch()
+        {
+            var parsed = AssertParsedAs<DumpMemoryJobFactory>("dumpmemory", "-p", "1234");
+
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
+        }
+
+        [Test]
+        public void DumpMemoryForceOptionCanBeBundledWithExclusiveOption()
+        {
+            var parsed = AssertParsedAs<DumpMemoryJobFactory>("dumpmemory", "-p", "1234", "-xf");
+
+            Assert.That(parsed.RunningProcess.Pid, Is.EqualTo(1234));
+            Assert.That(parsed.RunningProcess.SuspendProcess, Is.True);
+            Assert.That(parsed.OverwriteDumpFileIfExists, Is.True);
+        }
+
+        [Test]
         public void CanSpecifyProcessByName()
         {
             var parsed = AssertParsedAs<ShowStacksJobFactory>("showstacks", "-n", "process.exe");

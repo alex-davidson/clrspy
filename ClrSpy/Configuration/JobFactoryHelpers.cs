@@ -1,5 +1,8 @@
+using System;
+using System.IO;
 using System.Linq;
 using ClrSpy.CliSupport;
+using ClrSpy.Debugger;
 using ClrSpy.Processes;
 using x86Thunk;
 
@@ -28,6 +31,36 @@ namespace ClrSpy.Configuration
             {
                 throw new ErrorWithExitCodeException(3, ex.Message);
             }
+        }
+
+        public static string GetDumpFilePath(string dumpFileSpecification) => Path.Combine(Environment.CurrentDirectory, dumpFileSpecification);
+
+        public static string ValidateDumpFilePathForOutput(string rawDumpFilePath, bool overwrite)
+        {
+            var dumpFilePath = Path.GetFullPath(rawDumpFilePath);
+            if (Directory.Exists(dumpFilePath))
+            {
+                throw new ErrorWithExitCodeException(1, $"The specified path is a directory: {dumpFilePath}");
+            }
+            if (!overwrite && File.Exists(dumpFilePath))
+            {
+                throw new ErrorWithExitCodeException(1, $"The specified file exists and --force was not specified: {dumpFilePath}");
+            }
+            return dumpFilePath;
+        }
+
+        public static string ValidateDumpFilePathForInput(string rawDumpFilePath)
+        {
+            var dumpFilePath = Path.GetFullPath(rawDumpFilePath);
+            if (Directory.Exists(dumpFilePath))
+            {
+                throw new ErrorWithExitCodeException(1, $"The specified path is a directory: {dumpFilePath}");
+            }
+            if (!File.Exists(dumpFilePath))
+            {
+                throw new ErrorWithExitCodeException(1, $"The specified file does not exist: {dumpFilePath}");
+            }
+            return dumpFilePath;
         }
     }
 }

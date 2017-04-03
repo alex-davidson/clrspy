@@ -9,6 +9,8 @@ namespace ClrSpy
         public string Name { get; set; }
         public bool SuspendProcess { get; set; }
 
+        public bool WasSpecified => Pid.HasValue || Name != null;
+
         public void ReceiveFrom(OptionSet options)
         {
             options.Add("p=|pid=|process-id=", "PID of the target process.", (int o) => Pid = o);

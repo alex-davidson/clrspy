@@ -1,29 +1,26 @@
 using System.IO;
 using ClrSpy.CliSupport;
 using ClrSpy.Debugger;
-using ClrSpy.Processes;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Jobs
 {
     public class ShowStacksJob : IDebugJob
     {
-        private readonly IProcessInfo process;
-        public int Pid => process.Pid;
-        public bool Exclusive { get; }
+        private readonly IDebugSessionTarget target;
+        public int? Pid => (target as DebugRunningProcess)?.Process.Pid;
 
         public bool ShowStackObjects { get; set; }
 
-        public ShowStacksJob(IProcessInfo process, bool exclusive)
+        public ShowStacksJob(IDebugSessionTarget target)
         {
-            this.process = process;
-            this.Exclusive = exclusive;
-            ShowStackObjects = exclusive;
+            this.target = target;
+            ShowStackObjects = target.Exclusive;
         }
 
         public void Run(TextWriter output, ConsoleLog console)
         {
-            using (var session = DebugSession.Create(process, Exclusive ? DebugMode.Snapshot : DebugMode.Observe))
+            using (var session = target.CreateSession())
             {
                 var runtime = session.CreateRuntime();
                 WriteThreadInfo(runtime, output);

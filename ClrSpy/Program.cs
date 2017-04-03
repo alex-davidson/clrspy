@@ -106,6 +106,9 @@ namespace ClrSpy
 
                 case JobType.ShowHeap:
                     return new ShowHeapJobFactory();
+
+                case JobType.DumpMemory:
+                    return new DumpMemoryJobFactory();
                     
                 default:
                     throw new ErrorWithExitCodeException(1, $"Unsupported operation: {jobType}");
@@ -119,7 +122,7 @@ namespace ClrSpy
             if (jobFactory == null)
             {
                 Console.Error.WriteLine($"Usage: {Path.GetFileName(codeBase)} <mode> [options]");
-                Console.Error.WriteLine("  where mode is one of: showstacks, showheap");
+                Console.Error.WriteLine("  where mode is one of: showstacks, showheap, dumpmemory");
             }
             else
             {
