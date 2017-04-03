@@ -68,6 +68,7 @@
     <Compile Include="CliSupport\TerminationReason.cs" />
     <Compile Include="Configuration\DumpMemoryJobFactory.cs" />
     <Compile Include="Configuration\ProcessListDescriber.cs" />
+    <Compile Include="Debugger\DebugMemoryDump.cs" />
     <Compile Include="Debugger\DebugMode.cs" />
     <Compile Include="Debugger\DebugRunningProcess.cs" />
     <Compile Include="Debugger\DebugSession.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="Architecture\Requires64BitEnvironmentException.cs" />
     <Compile Include="CliSupport\ThirdParty\Options.cs" />
     <Compile Include="RunningProcessArguments.cs" />
+    <Compile Include="DumpedProcessArguments.cs" />
     <Compile Include="Statistics.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>

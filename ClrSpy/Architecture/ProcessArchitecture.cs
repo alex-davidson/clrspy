@@ -47,6 +47,19 @@ namespace ClrSpy.Architecture
             }
         }
 
+        public class Unknown : ProcessArchitecture
+        {
+            public override void AssertMatchesCurrent()
+            {
+                throw new InvalidOperationException("The requested operation requires running under a CPU architecture which could not be determined.");
+            }
+
+            public override string Describe()
+            {
+                return "unknown";
+            }
+        }
+
         public static ProcessArchitecture FromCurrentProcess()
         {
             if(Environment.Is64BitProcess) return new x64();
@@ -57,6 +70,13 @@ namespace ClrSpy.Architecture
         {
             if(NativeWrappers.IsWin64(process)) return new x64();
             return new x86();
+        }
+
+        public static ProcessArchitecture FromClrArchitecture(Microsoft.Diagnostics.Runtime.Architecture architecture)
+        {
+            if (architecture == Microsoft.Diagnostics.Runtime.Architecture.Amd64) return new x64();
+            if (architecture == Microsoft.Diagnostics.Runtime.Architecture.X86) return new x86();
+            return new Unknown();
         }
 
         protected bool Equals(ProcessArchitecture other)

@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using ClrSpy.Architecture;
 using ClrSpy.Processes;
 using Microsoft.Diagnostics.Runtime;
 
@@ -25,6 +26,23 @@ namespace ClrSpy.Debugger
 
             // Create the data target.  This tells us the versions of CLR loaded in the target process.
             var dataTarget = AttachWithMode(process, mode);
+
+            return new DebugSession(dataTarget);
+        }
+
+        /// <summary>
+        /// Creates a DebugSession against a memory dump file.
+        /// </summary>
+        /// <remarks>
+        /// First verifies that the target dump's architecture matches this process, throwing a Requires32/64BitEnvironmentException as necessary.
+        /// </remarks>
+        /// <param name="dumpFilePath"></param>
+        /// <returns></returns>
+        public static DebugSession Load(string dumpFilePath)
+        {
+            // Create the data target.  This tells us the versions of CLR loaded in the target process.
+            var dataTarget = DataTarget.LoadCrashDump(dumpFilePath);
+            ProcessArchitecture.FromClrArchitecture(dataTarget.Architecture).AssertMatchesCurrent();
 
             return new DebugSession(dataTarget);
         }
