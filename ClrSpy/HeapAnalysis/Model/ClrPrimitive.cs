@@ -1,4 +1,5 @@
 using System;
+using ClrSpy.Native;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.HeapAnalysis.Model
@@ -9,7 +10,14 @@ namespace ClrSpy.HeapAnalysis.Model
         {
             if (ReferenceEquals(value, null)) throw new ArgumentNullException(nameof(value));
             Type = type;
-            Value = value;
+            if (type.CanBeAssignedTo<IntPtr>())
+            {
+                Value = PointerUtils.CastLongToIntPtr((long)value);
+            }
+            else
+            {
+                Value = value;
+            }
         }
 
         public ClrType Type { get; }

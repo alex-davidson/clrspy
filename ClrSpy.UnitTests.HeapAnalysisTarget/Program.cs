@@ -49,6 +49,12 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
 
         #endregion
 
+        #region Convenient Primitives
+
+        public IntPtr IntPtr = new IntPtr(0x0dedbeef);
+
+        #endregion
+
         [MethodImpl(MethodImplOptions.NoOptimization)]
         static void Main(string[] args)
         {

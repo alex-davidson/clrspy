@@ -106,6 +106,7 @@
     <Compile Include="Configuration\IDebugJobFactory.cs" />
     <Compile Include="Debugger\NoClrModulesFoundException.cs" />
     <Compile Include="JobTypeParser.cs" />
+    <Compile Include="Native\PointerUtils.cs" />
     <Compile Include="Processes\IProcessFinder.cs" />
     <Compile Include="Processes\IProcessInfo.cs" />
     <Compile Include="Processes\ProcessFinder.cs" />
