@@ -6,8 +6,8 @@ namespace ClrSpy.HeapAnalysis.Tasks
     {
         void AddAsyncStateMachineContinuation(IClrCompositeObject continueWith);
         void AddDelegateContinuation(IClrCompositeObject continueWith);
-        void AddUnknownContinuation(IClrCompositeObject continueWith);
         void AddITaskCompletionActionContinuation(IClrCompositeObject continueWith);
         void AddTaskContinuation(ClrClassObject continueWith);
+        void AddUnknownContinuation(IClrCompositeObject continueWith);
     }
 }

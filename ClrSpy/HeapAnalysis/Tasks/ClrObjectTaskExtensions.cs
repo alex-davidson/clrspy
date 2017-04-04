@@ -11,10 +11,5 @@ namespace ClrSpy.HeapAnalysis.Tasks
         {
             return instances.OfType<ClrClassObject>().Where(o => o.Type.CanBeAssignedTo<Task>());
         }
-
-        public static bool IsOfTaskType(this ClrClassObject instance)
-        {
-            return instance.Type.CanBeAssignedTo<Task>();
-        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ClrSpy.HeapAnalysis.Model;
 
 namespace ClrSpy.HeapAnalysis.Tasks
@@ -15,10 +16,9 @@ namespace ClrSpy.HeapAnalysis.Tasks
 
         public void AddVertex(IClrCompositeObject obj)
         {
-            var maybeTask = obj as ClrClassObject;
-            if (maybeTask?.IsOfTaskType() == true)
+            if (obj.Type.CanBeAssignedTo<Task>())
             {
-                taskVertices.Add(maybeTask);
+                taskVertices.Add((ClrClassObject)obj);
             }
             else
             {
@@ -28,7 +28,7 @@ namespace ClrSpy.HeapAnalysis.Tasks
 
         private static void AssertIsTask(ClrClassObject task)
         {
-            if (!task.IsOfTaskType()) throw new ArgumentException($"Not a task: {task}");
+            if (!task.Type.CanBeAssignedTo<Task>()) throw new ArgumentException($"Not a task: {task}");
         }
 
         public IEnumerable<ClrClassObject> GetRoots()

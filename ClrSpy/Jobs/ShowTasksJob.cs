@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using ClrSpy.CliSupport;
 using ClrSpy.Debugger;
 using ClrSpy.HeapAnalysis;
 using ClrSpy.HeapAnalysis.Model;
 using ClrSpy.HeapAnalysis.Tasks;
-using ClrSpy.Processes;
 
 namespace ClrSpy.Jobs
 {
@@ -27,104 +25,77 @@ namespace ClrSpy.Jobs
             {
                 var runtime = session.CreateRuntime();
                 var graph = new ClrHeapTaskAnalyser(runtime).BuildTaskGraph();
+                new TaskTreeWalker(graph, new IndentedLineWriter(output)).WalkTree();
+            }
+        }
+
+        class TaskTreeWalker
+        {
+            private readonly TaskGraph graph;
+            private readonly IndentedLineWriter output;
+            private readonly ClrHeapTaskContinuationInspector inspector = new ClrHeapTaskContinuationInspector();
+
+            public TaskTreeWalker(TaskGraph graph, IndentedLineWriter output)
+            {
+                this.graph = graph;
+                this.output = output;
+            }
+
+            public void WalkTree()
+            {
                 foreach (var task in graph.GetRoots())
                 {
-                    WalkTask(new IndentedTextWriter(output), graph, task, 0);
+                    WalkTask(task, 0);
                     output.WriteLine();
                 }
             }
-        }
 
-        class IndentedTextWriter
-        {
-            private int depth = 0;
-            private readonly TextWriter inner;
-
-            public IndentedTextWriter(TextWriter inner)
+            private void WalkTask(ClrClassObject task, int waitingOnCount)
             {
-                this.inner = inner;
-            }
-
-            public IndentScope Indent()
-            {
-                return new IndentScope(this);
-            }
-
-            public void WriteLine(string line)
-            {
-                inner.Write(new String(' ', depth * 4));
-                inner.WriteLine(line);
-            }
-
-            public struct IndentScope : IDisposable
-            {
-                private readonly IndentedTextWriter writer;
-
-                public IndentScope(IndentedTextWriter writer)
+                var description = inspector.Inspect(task);
+                output.WriteLine(DescribeTask(description, waitingOnCount));
+                using (output.Indent())
                 {
-                    this.writer = writer;
-                    writer.depth++;
-                }
-
-                public void Dispose()
-                {
-                    writer.depth--;
+                    var waiting = graph.Outgoing(task).ToArray();
+                    WalkContinuations(waiting);
                 }
             }
-        }
 
-        private void WalkTask(IndentedTextWriter output, TaskGraph graph, ClrClassObject task, int waitedOnCount)
-        {
-            if (waitedOnCount > 1)
+            private void WalkContinuations(IClrCompositeObject[] waiting)
             {
-                output.WriteLine($"{DescribeTask(task)} ({waitedOnCount} antecedents)");
-            }
-            else
-            {
-                output.WriteLine(DescribeTask(task));
-            }
-            using (output.Indent())
-            {
-                var waiting = graph.Outgoing(task).ToArray();
-                WalkContinuations(output, graph, waiting);
-            }
-        }
-
-        private void WalkContinuations(IndentedTextWriter output, TaskGraph graph, IClrCompositeObject[] waiting)
-        {
-            foreach (var continuation in waiting)
-            {
-                var maybeTask = continuation as ClrClassObject;
-                if (maybeTask != null && maybeTask.IsOfTaskType())
+                foreach (var continuation in waiting)
                 {
-                    var waitedOnCount = graph.CountIncoming(maybeTask);
-                    WalkTask(output, graph, maybeTask, waitedOnCount);
-                }
-                else
-                {
-                    output.WriteLine(DescribeContinuation(graph, continuation));
+                    var waitingOnCount = graph.CountIncoming(continuation);
+                    if (continuation.Type.CanBeAssignedTo<Task>())
+                    {
+                        var task = (ClrClassObject)continuation;
+                        WalkTask(task, waitingOnCount);
+                    }
+                    else
+                    {
+                        var description = inspector.Inspect(continuation);
+                        output.WriteLine(DescribeContinuation(description, waitingOnCount));
+                    }
                 }
             }
-        }
 
-        private static string DescribeObject(IClrCompositeObject obj)
-        {
-            return $"{obj.Type.Name} @ {obj.Address:X16}";
-        }
-
-        private static string DescribeTask(ClrClassObject task)
-        {
-            return DescribeObject(task);
-        }
-
-        private static string DescribeContinuation(TaskGraph graph, IClrCompositeObject continuation)
-        {
-            var others = graph.CountIncoming(continuation) - 1;
-            if (others > 0)
+            private static string DescribeTask(ContinuationDetails task, int waitingOnCount)
             {
-                return $"{DescribeObject(continuation)} (waiting on {others} others)";
+                if (waitingOnCount > 1)
+                {
+                    return $"{task.Summary} ({waitingOnCount} antecedents)";
+                }
+                return task.Summary;
             }
-            return DescribeObject(continuation);
+
+            private static string DescribeContinuation(ContinuationDetails continuation, int waitingOnCount)
+            {
+                if (waitingOnCount > 1)
+                {
+                    return $"{continuation.Summary} (waiting on {waitingOnCount - 1} others)";
+                }
+                return continuation.Summary;
+            }
         }
     }
 }

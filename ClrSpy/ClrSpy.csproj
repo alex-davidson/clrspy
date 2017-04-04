@@ -82,7 +82,11 @@
     <Compile Include="HeapAnalysis\StructuredTypeFactory.cs" />
     <Compile Include="HeapAnalysis\Inspectors\DelegateInspector.cs" />
     <Compile Include="HeapAnalysis\Model\ClrMethodEqualityComparer.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrHeapTaskContinuationInspector.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ClrTaskContinuationClassifier.cs" />
+    <Compile Include="HeapAnalysis\Tasks\ContinuationDetails.cs" />
     <Compile Include="Jobs\DumpMemoryJob.cs" />
+    <Compile Include="Jobs\IndentedLineWriter.cs" />
     <Compile Include="Jobs\ShowHeapJob.cs" />
     <Compile Include="Configuration\ShowHeapJobFactory.cs" />
     <Compile Include="Jobs\ShowStacksJob.cs" />
