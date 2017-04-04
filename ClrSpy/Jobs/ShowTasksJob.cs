@@ -27,9 +27,8 @@ namespace ClrSpy.Jobs
             {
                 var runtime = session.CreateRuntime();
                 var graph = new ClrHeapTaskAnalyser(runtime).BuildTaskGraph();
-                foreach (var task in graph.TaskVertices)
+                foreach (var task in graph.GetRoots())
                 {
-                    if (graph.CountIncoming(task) > 0) continue;
                     WalkTask(new IndentedTextWriter(output), graph, task, 0);
                     output.WriteLine();
                 }

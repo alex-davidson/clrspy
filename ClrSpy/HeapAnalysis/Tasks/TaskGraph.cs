@@ -31,6 +31,11 @@ namespace ClrSpy.HeapAnalysis.Tasks
             if (!task.IsOfTaskType()) throw new ArgumentException($"Not a task: {task}");
         }
 
+        public IEnumerable<ClrClassObject> GetRoots()
+        {
+            return TaskVertices.Where(task => CountIncoming(task) == 0);
+        }
+
         public IEnumerable<ClrClassObject> Incoming(IClrCompositeObject continueWith)
         {
             List<ContinuationEdge> edgeList;

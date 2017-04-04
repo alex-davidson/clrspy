@@ -37,9 +37,7 @@ namespace ClrSpy.HeapAnalysis.Tasks
             }
             else if (continuation.Type.CanBeAssignedTo("System.Threading.Tasks.TaskContinuation"))
             {
-                // TaskContinuation#GetDelegateContinuationsForDebugger: abstract
-                // TODO
-                collector.AddUnknownContinuation(continuation);
+                CollectContinuationsFromTaskContinuationDerivedType(continuation, collector);
             }
             else if (continuation.Type.CanBeAssignedTo<Task>())
             {
@@ -48,12 +46,48 @@ namespace ClrSpy.HeapAnalysis.Tasks
             else if (continuation.Type.CanBeAssignedTo("System.Threading.Tasks.ITaskCompletionAction"))
             {
                 // Task#GetDelegatesFromContinuationObject
-                //   - Returns the object's Invoke method as an action. Type name is probably more useful.
+                //   - Returns the object's Invoke method as an action. Type name is probably more useful, so
+                //     we collect the ITaskCompletionAction instance instead.
                 collector.AddITaskCompletionActionContinuation(continuation);
             }
             else if (continuation.Type.CanBeAssignedTo<List<object>>())
             {
                 CollectContinuationsFromListOfObject(continuation, collector);
+            }
+            else
+            {
+                collector.AddUnknownContinuation(continuation);
+            }
+        }
+
+        private void CollectContinuationsFromTaskContinuationDerivedType(IClrCompositeObject continuation, IContinuationCollector collector)
+        {
+            // TaskContinuation#GetDelegateContinuationsForDebugger: abstract
+
+            if (continuation.Type.CanBeAssignedTo("System.Threading.Tasks.StandardTaskContinuation"))
+            {
+                // StandardTaskContinuation#GetDelegateContinuationsForDebugger
+                //   - Returns either the Task's m_action if present, or asks the Task for its continuations.
+                //     I suspect the former case means that it will start the Task running, while the latter
+                //     means that it resolves the Task.
+                var task = continuation.GetFieldValue<IClrCompositeObject>("m_task");
+                var taskAction = task.GetFieldValue<IClrCompositeObject>("m_action");
+
+                if (taskAction != null)
+                {
+                    CollectContinuationsFromDelegate(taskAction, collector);
+                }
+                else
+                {
+                    CollectContinuationsFromContinuationObject(task, collector);
+                }
+            }
+            else if(continuation.Type.CanBeAssignedTo("System.Threading.Tasks.AwaitTaskContinuation"))
+            {
+                // System.Threading.Tasks.AwaitTaskContinuation#GetDelegateContinuationsForDebugger
+
+                var action = continuation.GetFieldValue<IClrCompositeObject>("m_action");
+                CollectContinuationsFromDelegate(action, collector);
             }
             else
             {
