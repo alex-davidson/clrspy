@@ -35,7 +35,7 @@ namespace ClrSpy.Jobs
                     session.DataTarget.DebuggerInterface.WriteDumpFile(DumpFilePath, DEBUG_DUMP.SMALL);
                     return;
                 }
-                clientInterface.WriteDumpFile2(DumpFilePath, DEBUG_DUMP.SMALL, DEBUG_FORMAT.USER_SMALL_FULL_MEMORY, "");
+                clientInterface.WriteDumpFile2(DumpFilePath, DEBUG_DUMP.SMALL, DEBUG_FORMAT.USER_SMALL_FULL_MEMORY | DEBUG_FORMAT.CAB_SECONDARY_ALL_IMAGES, "");
             }
         }
     }
