@@ -62,14 +62,15 @@
     <Compile Include="Configuration\ShowHeapJobFactoryValidationTests.cs" />
     <Compile Include="HeapAnalysis\Collections\HeapIndexTests.cs" />
     <Compile Include="HeapAnalysis\Collections\ObjectAddressSetTests.cs" />
+    <Compile Include="HeapAnalysis\Inspectors\DelegateInspectorTests.cs" />
     <Compile Include="HeapAnalysis\Model\ArrayTests.cs" />
     <Compile Include="HeapAnalysis\Model\ConvenientPrimitiveTests.cs" />
     <Compile Include="HeapAnalysis\Model\HeapEnumerationTests.cs" />
     <Compile Include="HeapAnalysis\Model\LocalVarTests.cs" />
     <Compile Include="HeapAnalysis\Model\ModelTypeEqualityTests.cs" />
     <Compile Include="HeapAnalysis\Model\ObjectFieldTests.cs" />
-    <Compile Include="HeapAnalysis\Model\HeapAnalysisScope.cs" />
-    <Compile Include="HeapAnalysis\Model\HeapAnalysisTargetProcess.cs" />
+    <Compile Include="HeapAnalysis\HeapAnalysisScope.cs" />
+    <Compile Include="HeapAnalysis\HeapAnalysisTargetProcess.cs" />
     <Compile Include="HeapAnalysis\Model\SameTypeFieldTests.cs" />
     <Compile Include="HeapAnalysis\StructuredTypeFactoryTests.cs" />
     <Compile Include="Native\PointerUtilsTests.cs" />

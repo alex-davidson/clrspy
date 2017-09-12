@@ -6,8 +6,9 @@ using ClrSpy.HeapAnalysis;
 using ClrSpy.HeapAnalysis.Model;
 using ClrSpy.Processes;
 using ClrSpy.UnitTests.Utils;
+using Microsoft.Diagnostics.Runtime;
 
-namespace ClrSpy.UnitTests.HeapAnalysis.Model
+namespace ClrSpy.UnitTests.HeapAnalysis
 {
     public class HeapAnalysisScope : IDisposable
     {
@@ -25,6 +26,11 @@ namespace ClrSpy.UnitTests.HeapAnalysis.Model
         }
 
         public ClrClassObject Subject { get; }
+
+        public ClrType FindClrType<TActualType>()
+        {
+            return Subject.Type.Heap.GetTypeByName(typeof(TActualType).FullName);
+        }
 
         public static async Task<HeapAnalysisScope> Create()
         {

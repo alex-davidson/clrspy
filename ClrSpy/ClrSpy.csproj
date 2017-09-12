@@ -80,6 +80,8 @@
     <Compile Include="HeapAnalysis\MangledTypeNameParser.cs" />
     <Compile Include="HeapAnalysis\StructuredType.cs" />
     <Compile Include="HeapAnalysis\StructuredTypeFactory.cs" />
+    <Compile Include="HeapAnalysis\Inspectors\DelegateInspector.cs" />
+    <Compile Include="HeapAnalysis\Model\ClrMethodEqualityComparer.cs" />
     <Compile Include="Jobs\DumpMemoryJob.cs" />
     <Compile Include="Jobs\ShowHeapJob.cs" />
     <Compile Include="Configuration\ShowHeapJobFactory.cs" />

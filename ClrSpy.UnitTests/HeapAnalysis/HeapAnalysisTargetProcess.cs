@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using ClrSpy.UnitTests.Utils;
 
-namespace ClrSpy.UnitTests.HeapAnalysis.Model
+namespace ClrSpy.UnitTests.HeapAnalysis
 {
     class HeapAnalysisTargetProcess : ProcessWrapper<HeapAnalysisTarget.Program>
     {

@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using ClrSpy.HeapAnalysis.Model;
+using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.HeapAnalysis
 {
@@ -54,6 +55,11 @@ namespace ClrSpy.HeapAnalysis
             return String.Join(
                 Environment.NewLine,
                 instance.Type.Fields.Select(f => $"{f.Name} -> {instance.GetFieldValue(f.Name)}"));
+        }
+
+        public static ClrMethod FindMethodByName(this ClrType clrType, string methodName)
+        {
+            return clrType.Methods.SingleOrDefault(m => m.Name == methodName);
         }
     }
 }
