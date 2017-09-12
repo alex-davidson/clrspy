@@ -36,4 +36,23 @@ namespace ClrSpy.HeapAnalysis.Model
         public bool Equals(ClrPrimitive other) => Equals(Value, other?.Value) && ClrObjectUtils.AreTypesEquivalent(this, other);
         public override int GetHashCode() => Value.GetHashCode();
     }
+
+    public class ValueReader
+    {
+        public bool TryReadValue<T>(IClrObject obj, out T value)
+        {
+            var structObj = obj as ClrStructObject;
+            if (structObj?.Type.CanBeAssignedTo<Guid>() == true)
+            {
+                var bytes = new byte[16];
+                var count = structObj.Type.Heap.ReadMemory(structObj.Address, bytes, 0, 16);
+                if (count != 16) throw new Exception();
+                var guid = new Guid(bytes);
+                value = Util.ForceCast<Guid, T>(guid);
+                return true;
+            }
+            value = default(T);
+            return false;
+        }
+    }
 }

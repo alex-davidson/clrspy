@@ -35,11 +35,15 @@ namespace ClrSpy.HeapAnalysis
                 value = casted;
                 return true;
             }
-            var primitive = obj as ClrPrimitive;
-            if (primitive?.Value is T)
+            if (new ValueReader().TryReadValue(obj, out value)) return true;
+
+            if (obj is ClrPrimitive primitive)
             {
-                value = primitive.ValueAs<T>();
-                return true;
+                if (primitive.Value is T)
+                {
+                    value = primitive.ValueAs<T>();
+                    return true;
+                }
             }
             value = default(T);
             return false;

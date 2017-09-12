@@ -52,6 +52,7 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
         #region Convenient Primitives
 
         public IntPtr IntPtr = new IntPtr(0x0dedbeef);
+        public Guid Guid = new Guid("01234567-89AB-CDEF-0123-456789ABCDEF");
 
         #endregion
 
