@@ -33,6 +33,21 @@ namespace ClrSpy.Configuration
             }
         }
 
+        public static bool TryResolveTargetProcessQuietly(RunningProcessArguments identifiers, out IProcessInfo process)
+        {
+            var processResolver = new ProcessResolver(new ProcessFinder());
+            try
+            {
+                process = processResolver.ResolveTargetProcess(identifiers.Pid, identifiers.Name);
+                return true;
+            }
+            catch
+            {
+                process = null;
+                return false;
+            }
+        }
+
         public static string GetDumpFilePath(string dumpFileSpecification) => Path.Combine(Environment.CurrentDirectory, dumpFileSpecification);
 
         public static string ValidateDumpFilePathForOutput(string rawDumpFilePath, bool overwrite)
