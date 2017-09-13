@@ -73,8 +73,7 @@ namespace ClrSpy.Jobs
 
             for (var ptr = start; ptr <= stop; ptr += (ulong) runtime.PointerSize)
             {
-                ulong obj;
-                if (!runtime.ReadPointer(ptr, out obj)) break;
+                if (!runtime.ReadPointer(ptr, out var obj)) break;
 
                 var type = heap.GetObjectType(obj);
                 if (type == null) continue;

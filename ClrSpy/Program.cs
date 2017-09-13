@@ -157,9 +157,7 @@ namespace ClrSpy
                 var versionString = versionKey?.GetValue("Version")?.ToString();
                 if (versionString == null) return null; // Should be there for .NET 4.0+, surely?
 
-                Version version;
-                if(!Version.TryParse(versionString, out version)) return null;
-                return version;
+                return Version.TryParse(versionString, out var version) ? version : null;
             }
             catch
             {

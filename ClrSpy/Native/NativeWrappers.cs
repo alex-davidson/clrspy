@@ -10,9 +10,7 @@ namespace ClrSpy.Native
             if ((Environment.OSVersion.Version.Major > 5)
                 || ((Environment.OSVersion.Version.Major == 5) && (Environment.OSVersion.Version.Minor >= 1)))
             {
-                bool isWoW64;
-
-                if (!NativeMethods.IsWow64Process(process.Handle, out isWoW64))
+                if (!NativeMethods.IsWow64Process(process.Handle, out var isWoW64))
                 {
                     throw new Exception("Unable to query WoW64 state of process.");
                 }
