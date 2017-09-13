@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Linq;
-using ClrSpy.CliSupport;
-using ClrSpy.Jobs;
 using ClrSpy.Processes;
 
 namespace ClrSpy.Configuration
@@ -23,7 +21,7 @@ namespace ClrSpy.Configuration
 
                 var candidates = processFinder.FindProcessesByName(processName);
                 if(!candidates.Any()) throw new ProcessNotFoundException($"No process with name '{processName}' is running");
-                if(candidates.Count() == 1) return candidates.Single();
+                if(candidates.Length == 1) return candidates.Single();
 
                 throw new ProcessNotFoundException(candidates);
             }

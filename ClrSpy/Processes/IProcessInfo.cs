@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
 using ClrSpy.Architecture;
-using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Processes
 {

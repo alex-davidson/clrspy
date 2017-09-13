@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ClrSpy.CliSupport;
+﻿using ClrSpy.CliSupport;
 using NUnit.Framework;
 
 namespace ClrSpy.UnitTests.CliSupport

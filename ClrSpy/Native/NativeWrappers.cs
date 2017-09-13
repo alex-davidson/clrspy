@@ -1,7 +1,5 @@
 using System;
 using System.Diagnostics;
-using ClrSpy.Jobs;
-using ClrSpy.Processes;
 
 namespace ClrSpy.Native
 {

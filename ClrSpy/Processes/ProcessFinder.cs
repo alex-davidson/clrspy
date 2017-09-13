@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using ClrSpy.Architecture;
 using ClrSpy.Debugger;
-using ClrSpy.Native;
 using Microsoft.Diagnostics.Runtime;
 
 namespace ClrSpy.Processes

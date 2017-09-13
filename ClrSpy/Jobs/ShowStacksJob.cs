@@ -64,14 +64,14 @@ namespace ClrSpy.Jobs
         {
             var heap = runtime.GetHeap();
             
-            ulong start = thread.StackBase;
-            ulong stop = thread.StackLimit;
+            var start = thread.StackBase;
+            var stop = thread.StackLimit;
 
             if (start > stop) Util.Swap(ref start, ref stop);
 
             output.WriteLine("Stack objects:");
 
-            for (ulong ptr = start; ptr <= stop; ptr += (ulong) runtime.PointerSize)
+            for (var ptr = start; ptr <= stop; ptr += (ulong) runtime.PointerSize)
             {
                 ulong obj;
                 if (!runtime.ReadPointer(ptr, out obj)) break;

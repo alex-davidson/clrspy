@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using ClrSpy.Architecture;
 using ClrSpy.CliSupport;
 using ClrSpy.CliSupport.ThirdParty;
@@ -155,8 +154,8 @@ namespace ClrSpy
             try
             {
                 var versionKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Client");
-                if(versionKey == null) return null; // Should be there for .NET 4.0+, surely?
-                var versionString = versionKey.GetValue("Version")?.ToString();
+                var versionString = versionKey?.GetValue("Version")?.ToString();
+                if (versionString == null) return null; // Should be there for .NET 4.0+, surely?
 
                 Version version;
                 if(!Version.TryParse(versionString, out version)) return null;
