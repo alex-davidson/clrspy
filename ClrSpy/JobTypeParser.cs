@@ -9,8 +9,7 @@ namespace ClrSpy
         {
             if (!args.Any()) return null;
 
-            JobType jobType;
-            if (TryInterpretAsJobType(args.First(), out jobType))
+            if (TryInterpretAsJobType(args.First(), out var jobType))
             {
                 args = args.Skip(1).ToArray();
                 return jobType;

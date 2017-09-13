@@ -14,8 +14,6 @@ namespace x86Thunk
         /// <remarks>
         /// Requires that the currently-executing CLI application be a .NET assembly.
         /// </remarks>
-        /// <param name="executablePath"></param>
-        /// <returns></returns>
         public static int RecurseInto32BitProcess()
         {
             return ExecuteIn32BitProcess(GetEntryAssemblyUri().LocalPath, GetCurrentInvocationArguments());

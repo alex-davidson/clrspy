@@ -28,14 +28,16 @@ namespace ClrSpy.Jobs
                     if (!OverwriteDumpFileIfExists) throw new IOException($"File already exists: {DumpFilePath}");
                     File.Delete(DumpFilePath);
                 }
-                var clientInterface = session.DataTarget.DebuggerInterface as IDebugClient2;
-                if (clientInterface == null)
+
+                if (session.DataTarget.DebuggerInterface is IDebugClient2 clientInterface)
                 {
-                    console.WriteLine("WARNING: API only supports old-style dump? Recording minidump instead.");
-                    session.DataTarget.DebuggerInterface.WriteDumpFile(DumpFilePath, DEBUG_DUMP.SMALL);
+                    // Record complete dump, including binaries and symbols if possible.
+                    clientInterface.WriteDumpFile2(DumpFilePath, DEBUG_DUMP.SMALL, DEBUG_FORMAT.USER_SMALL_FULL_MEMORY | DEBUG_FORMAT.CAB_SECONDARY_ALL_IMAGES, "");
                     return;
                 }
-                clientInterface.WriteDumpFile2(DumpFilePath, DEBUG_DUMP.SMALL, DEBUG_FORMAT.USER_SMALL_FULL_MEMORY | DEBUG_FORMAT.CAB_SECONDARY_ALL_IMAGES, "");
+
+                console.WriteLine("WARNING: API only supports old-style dump? Recording minidump instead.");
+                session.DataTarget.DebuggerInterface.WriteDumpFile(DumpFilePath, DEBUG_DUMP.SMALL);
             }
         }
     }

@@ -2,7 +2,6 @@ using System;
 using System.IO;
 using System.Linq;
 using ClrSpy.CliSupport;
-using ClrSpy.Debugger;
 using ClrSpy.Processes;
 using x86Thunk;
 

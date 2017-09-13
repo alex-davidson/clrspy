@@ -23,7 +23,7 @@ namespace x86Thunk
             if(assembly.CodeBase == Assembly.GetEntryAssembly().CodeBase) return 255; // Recursion.
  
             Bootstrap.WasUsed = true;           
-            object ret = assembly.EntryPoint.Invoke(null, new object[] { args.Skip(1).ToArray() });
+            var ret = assembly.EntryPoint.Invoke(null, new object[] { args.Skip(1).ToArray() });
             return (ret == null) ? 0 : (int)ret;
         }
     }

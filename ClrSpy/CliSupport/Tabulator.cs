@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ClrSpy.CliSupport
 {
@@ -25,7 +22,7 @@ namespace ClrSpy.CliSupport
         public string GetHeader()
         {
             var writer = new StringWriter();
-            Tabulate(writer, columns.Select(c => c.Header).ToArray());
+            Tabulate(writer, columns.Select(c => c.Header).ToArray<object>());
             return writer.ToString();
         }
 

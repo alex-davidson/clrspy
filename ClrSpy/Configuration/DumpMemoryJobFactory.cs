@@ -24,8 +24,7 @@ namespace ClrSpy.Configuration
         public void Validate()
         {
             if(!RunningProcess.SuspendProcess) throw new ErrorWithExitCodeException(1, "The -x switch is required in order to dump the contents of memory.") { ShowUsage = true };
-            IProcessInfo process;
-            if (JobFactoryHelpers.TryResolveTargetProcessQuietly(RunningProcess, out process))
+            if (JobFactoryHelpers.TryResolveTargetProcessQuietly(RunningProcess, out var process))
             {
                 JobFactoryHelpers.ValidateDumpFilePathForOutput(GetDumpFilePath(process), OverwriteDumpFileIfExists);
             }
