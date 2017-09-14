@@ -62,7 +62,7 @@ namespace ClrSpy.Jobs
 
         private static void WriteStackObjects(ClrRuntime runtime, ClrThread thread, TextWriter output)
         {
-            var heap = runtime.GetHeap();
+            var heap = runtime.Heap;
             
             var start = thread.StackBase;
             var stop = thread.StackLimit;
