@@ -62,7 +62,7 @@ namespace ClrSpy.Jobs
             using (var session = target.CreateSession())
             {
                 var runtime = session.CreateRuntime();
-                var heap = runtime.GetHeap();
+                var heap = runtime.Heap;
                 return heap.EnumerateObjectAddresses()
                     .GroupBy(a => heap.GetObjectType(a))
                     .Select(g => new RawTypeInfo { TypeName = g.Key.Name, SizesInBytes = g.Select(g.Key.GetSize).ToArray() })

@@ -27,7 +27,7 @@ namespace ClrSpy.UnitTests.CliSupport
                 ) { Defaults = { Padding = 0 } };
 
             var header = tabulator.GetHeader();
-            Assert.That(header, Is.Not.StringContaining("\n"));
+            Assert.That(header, Does.Not.Contain("\n"));
         }
     }
 }
