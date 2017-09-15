@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.23107.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy", "ClrSpy\ClrSpy.csproj", "{E2111762-9A90-418D-9DAF-5C6563E4ECFE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "x86Thunk", "x86Thunk\x86Thunk.csproj", "{3BFE8B6E-3C26-494F-9FEB-B71A3E767D2B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests", "ClrSpy.UnitTests\ClrSpy.UnitTests.csproj", "{C845B5A7-F5D0-4987-9382-CD058908AA8A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests.HeapAnalysisTarget", "ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj", "{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{C845B5A7-F5D0-4987-9382-CD058908AA8A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C845B5A7-F5D0-4987-9382-CD058908AA8A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C845B5A7-F5D0-4987-9382-CD058908AA8A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
