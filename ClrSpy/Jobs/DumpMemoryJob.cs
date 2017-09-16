@@ -29,16 +29,21 @@ namespace ClrSpy.Jobs
                     File.Delete(DumpFilePath);
                 }
 
-                if (session.DataTarget.DebuggerInterface is IDebugClient2 clientInterface)
-                {
-                    // Record complete dump, including binaries and symbols if possible.
-                    clientInterface.WriteDumpFile2(DumpFilePath, DEBUG_DUMP.SMALL, DEBUG_FORMAT.USER_SMALL_FULL_MEMORY | DEBUG_FORMAT.CAB_SECONDARY_ALL_IMAGES, "");
-                    return;
-                }
-
-                console.WriteLine("WARNING: API only supports old-style dump? Recording minidump instead.");
-                session.DataTarget.DebuggerInterface.WriteDumpFile(DumpFilePath, DEBUG_DUMP.SMALL);
+                DumpSession(session, DumpFilePath, console);
             }
+        }
+
+        public static void DumpSession(DebugSession session, string filePath, ConsoleLog console = null)
+        {
+            if (session.DataTarget.DebuggerInterface is IDebugClient2 clientInterface)
+            {
+                // Record complete dump, including binaries and symbols if possible.
+                clientInterface.WriteDumpFile2(filePath, DEBUG_DUMP.SMALL, DEBUG_FORMAT.USER_SMALL_FULL_MEMORY | DEBUG_FORMAT.CAB_SECONDARY_ALL_IMAGES, "");
+                return;
+            }
+
+            console?.WriteLine("WARNING: API only supports old-style dump? Recording minidump instead.");
+            session.DataTarget.DebuggerInterface.WriteDumpFile(filePath, DEBUG_DUMP.SMALL);
         }
     }
 }

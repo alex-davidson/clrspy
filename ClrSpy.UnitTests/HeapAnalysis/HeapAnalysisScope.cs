@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using ClrSpy.Debugger;
 using ClrSpy.HeapAnalysis;
 using ClrSpy.HeapAnalysis.Model;
+using ClrSpy.Jobs;
 using ClrSpy.Processes;
 using ClrSpy.UnitTests.Utils;
 using Microsoft.Diagnostics.Runtime;
@@ -36,19 +37,49 @@ namespace ClrSpy.UnitTests.HeapAnalysis
         {
             using (var tracker = new DisposableTracker())
             {
-                var taskTarget = tracker.Track(new HeapAnalysisTargetProcess());
-                var process = taskTarget.Start();
-                await taskTarget.WaitForTask();
-
-                var session = tracker.Track(DebugSession.Create(ProcessInfo.FromProcess(process), DebugMode.Snapshot));
-                var runtime = session.CreateRuntime();
-                var subject = runtime.Heap
-                    .EnumerateAllClrObjects()
-                    .OfType<ClrClassObject>()
-                    .Single(i => i.Type.CanBeAssignedTo<HeapAnalysisTarget.Program>());
+                var session = await CreateDebugSession(tracker);
+                var subject = GetSubjectFromSession(session);
 
                 return tracker.TransferOwnershipTo(t => new HeapAnalysisScope(t, subject));
             }
+        }
+
+        public static HeapAnalysisScope LoadMemoryDump(string filePath)
+        {
+            using (var tracker = new DisposableTracker())
+            {
+                var session = tracker.Track(DebugSession.Load(filePath));
+                var subject = GetSubjectFromSession(session);
+
+                return tracker.TransferOwnershipTo(t => new HeapAnalysisScope(t, subject));
+            }
+        }
+
+        public static async Task WriteMemoryDump(string filePath)
+        {
+            using (var tracker = new DisposableTracker())
+            {
+                var session = await CreateDebugSession(tracker);
+                DumpMemoryJob.DumpSession(session, filePath);
+            }
+        }
+
+        private static async Task<DebugSession> CreateDebugSession(DisposableTracker tracker)
+        {
+            var taskTarget = tracker.Track(new HeapAnalysisTargetProcess());
+            var process = taskTarget.Start();
+            await taskTarget.WaitForTask();
+
+            return tracker.Track(DebugSession.Create(ProcessInfo.FromProcess(process), DebugMode.Snapshot));
+        }
+
+        private static ClrClassObject GetSubjectFromSession(DebugSession session)
+        {
+            var runtime = session.CreateRuntime();
+            return runtime.Heap
+                .EnumerateAllClrObjects()
+                .OfType<ClrClassObject>()
+                .Single(i => i.Type.CanBeAssignedTo<HeapAnalysisTarget.Program>());
         }
     }
 }
