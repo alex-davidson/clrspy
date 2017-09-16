@@ -80,6 +80,7 @@
     <Compile Include="Utils\DisposableTracker.cs" />
     <Compile Include="Utils\ProcessWrapper.cs" />
     <Compile Include="Utils\RandomSeed.cs" />
+    <Compile Include="Utils\TemporaryFile.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
