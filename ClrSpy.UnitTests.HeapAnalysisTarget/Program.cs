@@ -78,6 +78,7 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
         public Func<int> AnonymousGenericFunction;
         public IEnumerator<int> Enumerator;
         public IEnumerable<int> Enumerable;
+        public IEnumerable<int> OtherEnumerable;
         public Task AsyncStateMachine;
 
         #endregion
@@ -109,6 +110,7 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
             AnonymousGenericFunction = CreateAnonymousGenericFunction(42);
             Enumerator = new EnumerableClass().GetEnumerator();
             Enumerable = GetEnumerable();
+            OtherEnumerable = GetEnumerable(42);
             AsyncStateMachine = CreateAsyncTask();
         }
 
@@ -185,6 +187,13 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
         }
 
         public IEnumerable<int> GetEnumerable()
+        {
+            yield return 0;
+            yield return 1;
+            yield return 2;
+        }
+
+        public IEnumerable<int> GetEnumerable(int arg)
         {
             yield return 0;
             yield return 1;

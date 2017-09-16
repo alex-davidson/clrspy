@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Reflection;
+using System.Threading.Tasks;
 using ClrSpy.HeapAnalysis;
 using ClrSpy.HeapAnalysis.Model;
 using NUnit.Framework;
@@ -44,9 +46,9 @@ namespace ClrSpy.UnitTests.HeapAnalysis
         {
             using (var scope = await HeapAnalysisScope.Create())
             {
-                var delegateObj = scope.Subject.GetFieldValue(nameof(HeapAnalysisTarget.Program.Enumerator)).CastAs<IClrCompositeObject>();
+                var enumeratorObj = scope.Subject.GetFieldValue(nameof(HeapAnalysisTarget.Program.Enumerator)).CastAs<IClrCompositeObject>();
 
-                var resolvedSourceMethod = new SourceSymbolResolver().GetSourceMethod(delegateObj);
+                var resolvedSourceMethod = new SourceSymbolResolver().GetSourceMethod(enumeratorObj);
 
                 Assert.That(resolvedSourceMethod, Is.Not.Null);
                 Assert.That(resolvedSourceMethod.Name, Is.EqualTo(nameof(HeapAnalysisTarget.Program.EnumerableClass.GetEnumerator)));
@@ -59,13 +61,28 @@ namespace ClrSpy.UnitTests.HeapAnalysis
         {
             using (var scope = await HeapAnalysisScope.Create())
             {
-                var delegateObj = scope.Subject.GetFieldValue(nameof(HeapAnalysisTarget.Program.Enumerable)).CastAs<IClrCompositeObject>();
+                var enumerableObj = scope.Subject.GetFieldValue(nameof(HeapAnalysisTarget.Program.Enumerable)).CastAs<IClrCompositeObject>();
 
-                var resolvedSourceMethod = new SourceSymbolResolver().GetSourceMethod(delegateObj);
+                var resolvedSourceMethod = new SourceSymbolResolver().GetSourceMethod(enumerableObj);
 
                 Assert.That(resolvedSourceMethod, Is.Not.Null);
                 Assert.That(resolvedSourceMethod.Name, Is.EqualTo(nameof(HeapAnalysisTarget.Program.GetEnumerable)));
                 Assert.That(resolvedSourceMethod.Type.Is<HeapAnalysisTarget.Program>());
+            }
+        }
+
+        [Test]
+        public async Task DistinguishesSiblingGeneratorMethodsAndTheirEnumerableTypes()
+        {
+            using (var scope = await HeapAnalysisScope.Create())
+            {
+                var enumerableObj = scope.Subject.GetFieldValue(nameof(HeapAnalysisTarget.Program.Enumerable)).CastAs<IClrCompositeObject>();
+                var otherEnumerableObj = scope.Subject.GetFieldValue(nameof(HeapAnalysisTarget.Program.OtherEnumerable)).CastAs<IClrCompositeObject>();
+
+                var resolvedSourceMethod = new SourceSymbolResolver().GetSourceMethod(enumerableObj);
+                var resolvedOtherSourceMethod = new SourceSymbolResolver().GetSourceMethod(otherEnumerableObj);
+                
+                Assert.That(resolvedOtherSourceMethod.GetFullSignature(), Is.Not.EqualTo(resolvedSourceMethod.GetFullSignature()));
             }
         }
     }

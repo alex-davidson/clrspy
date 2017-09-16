@@ -39,6 +39,7 @@ namespace ClrSpy.HeapAnalysis
             var containingType = GetContainingType(enumeratorObj.Type);
             if (containingType == null) return null;
             var innerTypeName = GetInnerTypeName(enumeratorObj.Type);
+            
             var sourceMethodName = rxExtractSourceMethodName.Match(innerTypeName);
             if (!TryGetMethodSpan(enumeratorObj.Type.FindMethodByName("MoveNext"), out var moveNextMethodSpan)) return null;
             if (sourceMethodName.Success)
@@ -58,8 +59,6 @@ namespace ClrSpy.HeapAnalysis
             }
             return null;
         }
-
-        private static int LineInvalid = 0x00feefee;
 
         private ClrType GetContainingType(ClrType type)
         {
@@ -115,8 +114,7 @@ namespace ClrSpy.HeapAnalysis
                         var source = function.SequencePoints.Single();
                         span = new MethodSpan(
                             source.Lines
-                                .Where(l => l.LineBegin != LineInvalid)
-                                .Select(l => new LineRange { Begin = (int)l.LineBegin, End = (int)l.LineEnd })
+                                .Select(l => new LineRange((int)l.LineBegin, (int)l.LineEnd))
                                 .Distinct()
                                 .ToArray());
                     }
@@ -128,55 +126,6 @@ namespace ClrSpy.HeapAnalysis
                 span = default(MethodSpan);
                 return false;
             }
-        }
-    }
-
-    public struct MethodSpan
-    {
-        public LineRange[] LineRanges { get; }
-        public int BeginLine { get; }
-        public int EndLine { get; }
-
-        public MethodSpan(LineRange[] ranges)
-        {
-            if (!ranges.Any())
-            {
-                LineRanges = null;
-                BeginLine = 0;
-                EndLine = 0;
-                return;
-            }
-            LineRanges = ranges;
-            BeginLine = ranges.Select(r => r.Begin).Min();
-            EndLine = ranges.Select(r => r.End).Max();
-        }
-
-        public bool Overlaps(MethodSpan other)
-        {
-            if (LineRanges == null) return false;
-            if (other.LineRanges == null) return false;
-            if (other.BeginLine > this.EndLine) return false;
-            if (other.EndLine < this.BeginLine) return false;
-
-            return LineRanges.Any(r => other.LineRanges.Any(o => o.Overlaps(r)));
-        }
-    }
-
-    public struct LineRange
-    {
-        public int Begin { get; set; }
-        public int End { get; set; }
-
-        public bool Overlaps(LineRange other)
-        {
-            if (other.Begin > this.End) return false;
-            if (other.End < this.Begin) return false;
-            return true;
-        }
-
-        public override string ToString()
-        {
-            return Begin == End? Begin.ToString() : $"{Begin}-{End}";
         }
     }
 }
