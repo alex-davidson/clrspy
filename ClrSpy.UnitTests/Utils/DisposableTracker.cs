@@ -3,12 +3,16 @@ using System.Collections.Generic;
 
 namespace ClrSpy.UnitTests.Utils
 {
+    public interface IDisposableTracker
+    {
+        T Track<T>(T item);
+    }
 
     /// <summary>
     /// RAII-style tracking of IDisposable instances. Once all disposables are created, ownership can
     /// be transferred to the final container in an exception-safe manner.
     /// </summary>
-    public class DisposableTracker : IDisposable
+    public class DisposableTracker : IDisposable, IDisposableTracker
     {
         private Stack<IDisposable> scopes = new Stack<IDisposable>();
 

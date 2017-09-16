@@ -123,6 +123,7 @@
     <Compile Include="Architecture\Requires32BitEnvironmentException.cs" />
     <Compile Include="Architecture\Requires64BitEnvironmentException.cs" />
     <Compile Include="CliSupport\ThirdParty\Options.cs" />
+    <Compile Include="Reflection\ReflectionProvider.cs" />
     <Compile Include="RunningProcessArguments.cs" />
     <Compile Include="DumpedProcessArguments.cs" />
     <Compile Include="Statistics.cs" />

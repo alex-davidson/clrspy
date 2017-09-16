@@ -64,7 +64,7 @@ namespace ClrSpy.UnitTests.HeapAnalysis
             }
         }
 
-        private static async Task<DebugSession> CreateDebugSession(DisposableTracker tracker)
+        private static async Task<DebugSession> CreateDebugSession(IDisposableTracker tracker)
         {
             var taskTarget = tracker.Track(new HeapAnalysisTargetProcess());
             var process = taskTarget.Start();
