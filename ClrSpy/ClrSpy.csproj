@@ -126,6 +126,7 @@
     <Compile Include="RunningProcessArguments.cs" />
     <Compile Include="DumpedProcessArguments.cs" />
     <Compile Include="Statistics.cs" />
+    <Compile Include="HeapAnalysis\SourceSymbolResolver.cs" />
     <Compile Include="Util.cs" />
   </ItemGroup>
   <ItemGroup>

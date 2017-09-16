@@ -41,6 +41,7 @@ namespace ClrSpy.UnitTests.HeapAnalysis
         [TestCase("System.Threading.Tasks.Task+<>c", "System.Threading.Tasks.Task+<>c")]
         [TestCase("ClrSpy.UnitTests.AsyncTaskTarget.Program+<SimpleTest>d__4", "ClrSpy.UnitTests.AsyncTaskTarget.Program+<SimpleTest>d__4")]
         [TestCase("Microsoft.FSharp.Control.LazyExtensions+Create@6356[[System.String, mscorlib]]", "Microsoft.FSharp.Control.LazyExtensions+Create@6356<System.String>")]
+        [TestCase("Microsoft.VisualStudio.CommonIDE.OOBFeedManager.VsOOBFeedManager.<>c__DisplayClass11_0.<<QueueNextDownload>b__0>d", "Microsoft.VisualStudio.CommonIDE.OOBFeedManager.VsOOBFeedManager.<>c__DisplayClass11_0.<<QueueNextDownload>b__0>d")]
         public void CanParseWeirdEdgeCases(string name, string reformatted)
         {
             var structured = new StructuredTypeFactory().CreateFromTypeName(name);

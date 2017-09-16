@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Reflection;
+using System.Threading.Tasks;
 
 namespace ClrSpy.UnitTests.HeapAnalysisTarget
 {
@@ -69,6 +72,16 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
 
         #endregion
 
+        #region Compiler-generated Members
+
+        public Action AnonymousFunction;
+        public Func<int> AnonymousGenericFunction;
+        public IEnumerator<int> Enumerator;
+        public IEnumerable<int> Enumerable;
+        public Task AsyncStateMachine;
+
+        #endregion
+
         [MethodImpl(MethodImplOptions.NoOptimization)]
         static void Main(string[] args)
         {
@@ -91,6 +104,12 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
             InstanceOpenVirtualDelegate = CreateDelegate<Action<InstanceDelegateContainer>>(null, typeof(InstanceDelegateContainer).GetMethod(nameof(InstanceDelegateContainer.VirtualMethod)));
             StaticClosedDelegate = CreateDelegate<Action>(new InstanceDelegateContainer("Instance4"), typeof(IInstanceDelegates).GetMethod(nameof(IInstanceDelegates.InterfaceMethod)));
             StaticOpenedDelegate = CreateDelegate<Action>(null, typeof(InstanceDelegateContainer).GetMethod(nameof(InstanceDelegateContainer.StaticMethod)));
+
+            AnonymousFunction = CreateAnonymousFunction();
+            AnonymousGenericFunction = CreateAnonymousGenericFunction(42);
+            Enumerator = new EnumerableClass().GetEnumerator();
+            Enumerable = GetEnumerable();
+            AsyncStateMachine = CreateAsyncTask();
         }
 
         public struct StructType
@@ -141,6 +160,41 @@ namespace ClrSpy.UnitTests.HeapAnalysisTarget
         private static TOutput ForceCast<TInput, TOutput>(TInput input)
         {
             return (TOutput)(object)input;
+        }
+
+        public Action CreateAnonymousFunction()
+        {
+            return () => {};
+        }
+
+        public Func<T> CreateAnonymousGenericFunction<T>(T value)
+        {
+            return () => value;
+        }
+
+        public class EnumerableClass : IEnumerable<int>
+        {
+            public IEnumerator<int> GetEnumerator()
+            {
+                yield return 0;
+                yield return 1;
+                yield return 2;
+            }
+
+            IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+        }
+
+        public IEnumerable<int> GetEnumerable()
+        {
+            yield return 0;
+            yield return 1;
+            yield return 2;
+        }
+
+        public async Task CreateAsyncTask()
+        {
+            await Task.Delay(1000);
+            await Task.Yield();
         }
     }
 }

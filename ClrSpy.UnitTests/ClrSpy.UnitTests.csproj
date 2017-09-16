@@ -76,6 +76,7 @@
     <Compile Include="Native\PointerUtilsTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StatisticsTests.cs" />
+    <Compile Include="HeapAnalysis\SourceSymbolResolverTests.cs" />
     <Compile Include="Utils\CommandLineUtils.cs" />
     <Compile Include="Utils\DisposableTracker.cs" />
     <Compile Include="Utils\ProcessWrapper.cs" />

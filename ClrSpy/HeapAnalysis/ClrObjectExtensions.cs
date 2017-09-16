@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using ClrSpy.HeapAnalysis.Model;
 using Microsoft.Diagnostics.Runtime;
@@ -60,6 +61,11 @@ namespace ClrSpy.HeapAnalysis
         public static ClrMethod FindMethodByName(this ClrType clrType, string methodName)
         {
             return clrType.Methods.SingleOrDefault(m => m.Name == methodName);
+        }
+
+        public static IEnumerable<ClrMethod> FindMethodsByName(this ClrType clrType, string methodName)
+        {
+            return clrType.Methods.Where(m => m.Name == methodName);
         }
     }
 }
