@@ -1,5 +1,9 @@
 # CLRSpy 
 
+[![Build status](https://ci.appveyor.com/api/projects/status/tjh1lycjs4s830wd/branch/master?svg=true)](https://ci.appveyor.com/project/alex-davidson/clrspy/branch/master)
+* Download: [ClrSpy.exe](https://ci.appveyor.com/api/projects/alex-davidson/clrspy/artifacts/ClrSpy/bin/Release/ClrSpy.exe?branch=master)
+* Symbols: [ClrSpy.pdb](https://ci.appveyor.com/api/projects/alex-davidson/clrspy/artifacts/ClrSpy/bin/Release/ClrSpy.pdb?branch=master)
+
 Extremely basic debug/dump tool. Should work against 32-bit or 64-bit processes.
 
 All usages expect either a running process or a dumpfile as their input.
