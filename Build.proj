@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+
+    <!--
+
+    Inputs:
+      * OutputDirectory:  location for final build output
+
+    -->
+
+    <Import Project="build\Platform.props" />
+    <Import Project="build\NUnit.targets" />
+
+    <PropertyGroup>
+        <Configuration>Release</Configuration>
+        <WorkingDirectory>$(MSBuildProjectDirectory)</WorkingDirectory>
+    </PropertyGroup>
+
+    <ItemDefinitionGroup>
+        <!-- NUnit test projects. -->
+        <NUnitProjects></NUnitProjects>
+        <!-- Projects which produce files which should be copied directly to the output directory. -->
+        <OutputBinaryProjects></OutputBinaryProjects>
+    </ItemDefinitionGroup>
+
+    <Import Project="Build.props" />
+
+    <Target DependsOnTargets="PreparePlatformInfo" Name="Build">
+        <MSBuild Projects="@(OutputBinaryProjects)" Targets="Build" BuildInParallel="true" Properties="Configuration=$(Configuration)">
+            <Output TaskParameter="TargetOutputs" ItemName="OutputBinaries" />
+        </MSBuild>
+    </Target>
+
+    <Target Name="BuildAndTest" DependsOnTargets="Build;RunNUnitTests">
+    </Target>
+
+    <Target Name="BuildAndPackage" DependsOnTargets="PrepareOutputDirectory;BuildAndTest">
+        <Copy SourceFiles="@(OutputBinaries)" DestinationFiles="@(OutputBinaries->'$(OutputDirectory)\%(FileName)%(Extension)')" />
+    </Target>
+
+    <Target Name="PrepareOutputDirectory">
+        <Error Text="OutputDirectory was not specified" Condition="'$(OutputDirectory)' == ''" />
+
+        <!-- Make paths absolute -->
+        <CombinePath BasePath="$(MSBuildProjectDirectory)" Paths="$(OutputDirectory)">
+            <Output TaskParameter="CombinedPaths" PropertyName="OutputDirectory" />
+        </CombinePath>
+
+        <Message Text="Output Directory: $(OutputDirectory)" />
+
+        <MakeDir Directories="$(OutputDirectory)" />
+    </Target>
+</Project>

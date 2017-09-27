@@ -47,7 +47,7 @@ namespace x86Thunk
 
             if(!Environment.Is64BitProcess) return 32;
              
-            var thunk = typeof(Program).Assembly.Location;
+            var thunk = GetThunkPath();
             // This is ridiculous. Why does the API not simply accept a list of argument strings?
             var quotedArguments = new [] { executablePath }.Concat(originalArgs).Select(QuoteIfNecessary).ToArray();
             
@@ -76,6 +76,7 @@ namespace x86Thunk
         private static string QuoteIfNecessary(string arg) => rxNoQuotingRequired.IsMatch(arg) ? arg : Quote(arg);
         private static string Quote(string arg) => $"\"{arg.Replace("\"", "\"\"")}\"";
         public static Uri GetEntryAssemblyUri() => new Uri(Assembly.GetEntryAssembly().CodeBase);
+        public static string GetThunkPath() => typeof(Program).Assembly.Location;
 
         public static bool WasUsed { get; internal set; }
     }
