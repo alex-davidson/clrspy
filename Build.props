@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <ItemGroup>
+        <!-- Full list of NUnit test projects -->
+        <NUnitProjects Include="ClrSpy.UnitTests\ClrSpy.UnitTests.csproj" />
+
+        <!-- Projects which produce files which should be copied directly to the output directory. -->
+        <OutputBinaryProjects Include="ClrSpy\ClrSpy.csproj" />
+    </ItemGroup>
+</Project>

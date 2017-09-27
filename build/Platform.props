@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Target Name="PreparePlatformInfo">
+    <GetCurrentProcessBitness>
+      <Output TaskParameter="ProcessBitness" PropertyName="CurrentProcessBitness" />
+    </GetCurrentProcessBitness>
+  </Target>
+
+  <UsingTask TaskName="GetCurrentProcessBitness" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.Core.dll">
+    <ParameterGroup>
+      <ProcessBitness ParameterType="System.Int32" Required="false" Output="true" />
+    </ParameterGroup>
+    <Task>
+      <Code Type="Fragment" Language="cs">
+        ProcessBitness = System.IntPtr.Size == 8 ? 64 : 32;
+      </Code>
+    </Task>
+  </UsingTask>
+</Project>
