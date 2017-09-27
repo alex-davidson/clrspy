@@ -31,7 +31,7 @@ May take some time to run, and it requires -x.
     clrspy dumpmemory -x [-d <dumpfile>] [-v] [-p <pid>] [-n <name>] [-f]
 
 Create a full memory dumpfile from a process. Includes the process's entire memory space and symbol tables if possible.
-If the dumpfile is not specified, 'memorydump-<pid>' will be used instead.
+If the dumpfile is not specified,`memorydump-<pid>` will be used instead.
 May take some time to run, and it requires -x.
 
 ## Licence
