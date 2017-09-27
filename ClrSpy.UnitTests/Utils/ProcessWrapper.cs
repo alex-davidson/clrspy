@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ClrSpy.Architecture;
 
 namespace ClrSpy.UnitTests.Utils
 {
@@ -22,15 +23,19 @@ namespace ClrSpy.UnitTests.Utils
             yield break;
         }
 
-        private string BuildQuotedArguments()
-        {
-            return String.Join(" ", GetArguments().Select(CommandLineUtils.QuoteArgument));
-        }
-
         public bool HasStarted => Process != null;
         public bool IsRunning => Process?.HasExited == false;
 
         public Process Start()
+        {
+            if (!Environment.Is64BitProcess && Environment.Is64BitOperatingSystem)
+            {
+                return Startx86();
+            }
+            return StartNative();
+        }
+
+        protected Process StartNative()
         {
             if (HasStarted) throw new InvalidOperationException();
 
@@ -41,7 +46,23 @@ namespace ClrSpy.UnitTests.Utils
                 FileName = processAssemblyPath,
                 UseShellExecute = false,
                 CreateNoWindow = true,
-                Arguments = BuildQuotedArguments()
+                Arguments = String.Join(" ", GetArguments().Select(CommandLineUtils.QuoteArgument))
+            };
+            return Process = Process.Start(startInfo);
+        }
+
+        protected Process Startx86()
+        {
+            if (HasStarted) throw new InvalidOperationException();
+
+            var startInfo  = new ProcessStartInfo {
+                RedirectStandardInput = true,
+                RedirectStandardOutput = true,
+                RedirectStandardError = true,
+                FileName = x86Thunk.Bootstrap.GetThunkPath(),
+                UseShellExecute = false,
+                CreateNoWindow = true,
+                Arguments = String.Join(" ", new [] { processAssemblyPath }.Concat(GetArguments()).Select(CommandLineUtils.QuoteArgument))
             };
             return Process = Process.Start(startInfo);
         }
