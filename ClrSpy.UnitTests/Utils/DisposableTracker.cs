@@ -3,24 +3,24 @@ using System.Collections.Generic;
 
 namespace ClrSpy.UnitTests.Utils
 {
+
     /// <summary>
     /// RAII-style tracking of IDisposable instances. Once all disposables are created, ownership can
     /// be transferred to the final container in an exception-safe manner.
     /// </summary>
-    public struct DisposableTracker : IDisposable
+    public class DisposableTracker : IDisposable
     {
-        private Stack<IDisposable> scopes;
+        private Stack<IDisposable> scopes = new Stack<IDisposable>();
 
         public T Track<T>(T item)
         {
-            if (scopes == null) scopes = new Stack<IDisposable>();
             scopes.Push(item as IDisposable);
             return item;
         }
 
         public T TransferOwnershipTo<T>(Func<IDisposable, T> createNewOwner)
         {
-            var newOwner = createNewOwner(this);
+            var newOwner = createNewOwner(new DisposableTracker { scopes = scopes });
             scopes = null;
             return newOwner;
         }
