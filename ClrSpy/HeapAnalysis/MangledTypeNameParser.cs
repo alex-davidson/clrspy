@@ -59,7 +59,7 @@ namespace ClrSpy.HeapAnalysis
                 }
                 if (depth > 0) return false;
             }
-            do
+            while (current < typeName.Length)
             {
                 var c = typeName[current];
                 if (char.IsWhiteSpace(c)) break;
@@ -70,7 +70,7 @@ namespace ClrSpy.HeapAnalysis
                 if (c == '[') break;
                 if (c == ']') break;
                 current++;
-            } while (current < typeName.Length);
+            }
             return current > start;
         }
 

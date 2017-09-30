@@ -24,6 +24,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -108,6 +109,27 @@
     <Compile Include="Configuration\IDebugJobFactory.cs" />
     <Compile Include="Debugger\NoClrModulesFoundException.cs" />
     <Compile Include="JobTypeParser.cs" />
+    <Compile Include="Metadata\BlobDecompressor.cs" />
+    <Compile Include="Metadata\CallingConvention.cs" />
+    <Compile Include="Metadata\ClrCustomAttribute.cs" />
+    <Compile Include="Metadata\ClrCustomAttributeReader.cs" />
+    <Compile Include="Metadata\ClrEnumUnderlyingTypeResolver.cs" />
+    <Compile Include="Metadata\CustomAttributeSig.cs" />
+    <Compile Include="Metadata\CustomAttributeSignatureParser.cs" />
+    <Compile Include="Metadata\ElementType.cs" />
+    <Compile Include="Metadata\FieldSig.cs" />
+    <Compile Include="Metadata\IMetadataImport.cs" />
+    <Compile Include="Metadata\MetadataImportWrapper.cs" />
+    <Compile Include="Metadata\MetadataTokenType.cs" />
+    <Compile Include="Metadata\MetadataToken.cs" />
+    <Compile Include="Metadata\MethodSig.cs" />
+    <Compile Include="Metadata\MethodSigFormatter.cs" />
+    <Compile Include="Metadata\ParamSig.cs" />
+    <Compile Include="Metadata\PropertySig.cs" />
+    <Compile Include="Metadata\SignatureFormatException.cs" />
+    <Compile Include="Metadata\SignatureParser.cs" />
+    <Compile Include="Metadata\SignatureReader.cs" />
+    <Compile Include="Metadata\TypeSig.cs" />
     <Compile Include="Native\PointerUtils.cs" />
     <Compile Include="Processes\IProcessFinder.cs" />
     <Compile Include="Processes\IProcessInfo.cs" />

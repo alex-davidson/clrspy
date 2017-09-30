@@ -12,6 +12,11 @@ namespace ClrSpy.HeapAnalysis
             return structuredTypeFactory.CreateFromType(typeof(TTarget)).Equals(structuredTypeFactory.CreateFromClrType(assignee));
         }
 
+        public static bool Is(this ClrType assignee, string typeName)
+        {
+            return structuredTypeFactory.CreateFromTypeName(typeName).Equals(structuredTypeFactory.CreateFromClrType(assignee));
+        }
+
         public static bool CanBeAssignedTo<TTarget>(this ClrType assignee)
         {
             return CanBeAssignedTo(assignee, typeof(TTarget));

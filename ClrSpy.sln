@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests", "ClrSpy.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests.HeapAnalysisTarget", "ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj", "{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy.UnitTests.MetadataAnalysisTarget", "ClrSpy.UnitTests.MetadataAnalysisTarget\ClrSpy.UnitTests.MetadataAnalysisTarget.csproj", "{3250375E-B317-4527-955C-B65C398D35F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,8 +35,15 @@ Global
 		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6E51E27B-1D89-49E9-A610-3C153BFCA7A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3250375E-B317-4527-955C-B65C398D35F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3250375E-B317-4527-955C-B65C398D35F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3250375E-B317-4527-955C-B65C398D35F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3250375E-B317-4527-955C-B65C398D35F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {666A7D2E-D02D-40E3-A642-87B21C26B36C}
 	EndGlobalSection
 EndGlobal
