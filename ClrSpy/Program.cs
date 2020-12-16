@@ -7,6 +7,7 @@ using ClrSpy.CliSupport.ThirdParty;
 using ClrSpy.Configuration;
 using ClrSpy.Debugger;
 using ClrSpy.Jobs;
+using ClrSpy.Processes;
 using Microsoft.Win32;
 using x86Thunk;
 
@@ -54,6 +55,12 @@ namespace ClrSpy
                     ShowUsage(mainArguments.JobType, options);
                 }
                 return ex.ExitCode;
+            }
+            catch (FeatureUnavailableException ex)
+            {
+                Console.Error.WriteLine(ex.Message);
+                if (mainArguments.Verbose) Console.Error.WriteLine(ex.InnerException);
+                return 254;
             }
             catch (Exception ex)
             {

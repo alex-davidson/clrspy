@@ -46,14 +46,15 @@ namespace ClrSpy.Configuration
                 new Column("Pid") { Width = 5, RightAlign = true},
                 new Column("Name") { Width = 20},
                 new Column("Memory") { Width = 12, RightAlign = true},
-                new Column("CLR Versions"))
+                new Column("CLR Versions") { Width = 12 },
+                new Column("App Pool"))
             { Defaults = { Padding = 2 } };
             
             console.WriteLine($"{processes.Count} matching {ProcessArchitecture.FromCurrentProcess().Describe()} processes were found:");
             console.WriteLine(tabulator.GetHeader());
             foreach (var candidate in processes.OrderBy(c => c.Pid))
             {
-                console.WriteLine(tabulator.Tabulate(candidate.Pid, candidate.Name, $"{candidate.WorkingSetSizeBytes.InKilobytes()} KB", DescribeCLRVersions(candidate)));
+                console.WriteLine(tabulator.Tabulate(candidate.Pid, candidate.Name, $"{candidate.WorkingSetSizeBytes.InKilobytes()} KB", DescribeCLRVersions(candidate), candidate.IISAppPoolName));
             }
         }
 

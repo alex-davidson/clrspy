@@ -10,11 +10,11 @@ namespace ClrSpy.UnitTests.Configuration
     public class ProcessResolverTests
     {
         [Test]
-        public void ProvidingNeitherPidNorProcessName_ThrowsException()
+        public void ProvidingNeitherPidNorProcessNameNorAppPoolName_ThrowsException()
         {
             var processResolver = new ProcessResolver(Mock.Of<IProcessFinder>());
 
-            Assert.Throws<ProcessNotSpecifiedException>(() => processResolver.ResolveTargetProcess(null, ""));
+            Assert.Throws<ProcessNotSpecifiedException>(() => processResolver.ResolveTargetProcess(null, "", null));
         }
         
         [Test]
@@ -23,7 +23,7 @@ namespace ClrSpy.UnitTests.Configuration
             var processResolver = new ProcessResolver(
                 Mock.Of<IProcessFinder>(f => f.FindProcessesByName("process.exe") == new[] { new ProcessInfo { Pid = 1234 } }));
 
-            var process = processResolver.ResolveTargetProcess(null, "process.exe");
+            var process = processResolver.ResolveTargetProcess(null, "process.exe", null);
             
             Assert.That(process.Pid, Is.EqualTo(1234));
         }
@@ -34,7 +34,7 @@ namespace ClrSpy.UnitTests.Configuration
             var processResolver = new ProcessResolver(
                 Mock.Of<IProcessFinder>(f => f.VerifyProcessName("process.exe", 1234) == new ProcessInfo { Pid = 1234 }));
 
-            var process = processResolver.ResolveTargetProcess(1234, "process.exe");
+            var process = processResolver.ResolveTargetProcess(1234, "process.exe", null);
             
             Assert.That(process.Pid, Is.EqualTo(1234));
         }
@@ -48,7 +48,43 @@ namespace ClrSpy.UnitTests.Configuration
                     new ProcessInfo()
                 }));
 
-            var exception = Assert.Throws<ProcessNotFoundException>(() => processResolver.ResolveTargetProcess(null, "process.exe"));
+            var exception = Assert.Throws<ProcessNotFoundException>(() => processResolver.ResolveTargetProcess(null, "process.exe", null));
+            
+            Assert.That(exception.Candidates.Count(), Is.EqualTo(2));
+        }
+        
+        [Test]
+        public void AppPoolNamePrefixIsResolvedToPid()
+        {
+            var processResolver = new ProcessResolver(
+                Mock.Of<IProcessFinder>(f => f.FindProcessesByAppPoolNamePrefix("App_") == new[] { new ProcessInfo { Pid = 1234 } }));
+
+            var process = processResolver.ResolveTargetProcess(null, null, "App_");
+            
+            Assert.That(process.Pid, Is.EqualTo(1234));
+        }
+
+        [Test]
+        public void AppPoolNameAndPidAreCheckedForMismatch()
+        {
+            var processResolver = new ProcessResolver(
+                Mock.Of<IProcessFinder>(f => f.VerifyAppPoolNamePrefix("App_", 1234) == new ProcessInfo { Pid = 1234 }));
+            
+            var process = processResolver.ResolveTargetProcess(1234, null, "App_");
+            
+            Assert.That(process.Pid, Is.EqualTo(1234));
+        }
+        
+        [Test]
+        public void NonUniqueAppPoolNamePrefixCannotBeResolved()
+        {
+            var processResolver = new ProcessResolver(
+                Mock.Of<IProcessFinder>(f => f.FindProcessesByAppPoolNamePrefix("App_") == new[] {
+                    new ProcessInfo(),
+                    new ProcessInfo()
+                }));
+
+            var exception = Assert.Throws<ProcessNotFoundException>(() => processResolver.ResolveTargetProcess(null, null, "App_"));
             
             Assert.That(exception.Candidates.Count(), Is.EqualTo(2));
         }

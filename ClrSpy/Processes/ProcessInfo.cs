@@ -5,14 +5,15 @@ namespace ClrSpy.Processes
 {
     public class ProcessInfo : IProcessInfo
     {
-        public static IProcessInfo FromProcess(Process process)
+        public static IProcessInfo FromProcess(Process process, string appPoolName = null)
         {
             return new ProcessInfo {
                 Pid = process.Id,
                 Name = process.ProcessName,
                 VirtualMemorySizeBytes = process.VirtualMemorySize64,
                 WorkingSetSizeBytes = process.WorkingSet64,
-                Architecture = ProcessArchitecture.FromProcess(process)
+                Architecture = ProcessArchitecture.FromProcess(process),
+                IISAppPoolName = appPoolName,
             };
         }
 
@@ -21,5 +22,6 @@ namespace ClrSpy.Processes
         public string Name { get; set; }
         public int Pid { get; set; }
         public ProcessArchitecture Architecture { get; set; }
+        public string IISAppPoolName { get; set; }
     }
 }
