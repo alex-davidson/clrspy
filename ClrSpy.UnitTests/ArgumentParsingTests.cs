@@ -63,6 +63,16 @@ namespace ClrSpy.UnitTests
             var parsed = AssertParsedAs<ShowStacksJobFactory>("showstacks", "-n", "process.exe");
 
             Assert.That(parsed.RunningProcess.Name, Is.EqualTo("process.exe"));
+            Assert.That(parsed.RunningProcess.WasSpecified, Is.True);
+        }
+
+        [Test]
+        public void CanSpecifyIISAppPoolByNamePrefix()
+        {
+            var parsed = AssertParsedAs<ShowStacksJobFactory>("showstacks", "-a", "AppPool_");
+
+            Assert.That(parsed.RunningProcess.AppPoolNamePrefix, Is.EqualTo("AppPool_"));
+            Assert.That(parsed.RunningProcess.WasSpecified, Is.True);
         }
 
         private static T AssertParsedAs<T>(params string[] args) where T : IDebugJobFactory

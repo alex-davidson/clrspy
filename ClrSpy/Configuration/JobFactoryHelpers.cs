@@ -14,7 +14,7 @@ namespace ClrSpy.Configuration
             var processResolver = new ProcessResolver(new ProcessFinder());
             try
             {
-                return processResolver.ResolveTargetProcess(identifiers.Pid, identifiers.Name);
+                return processResolver.ResolveTargetProcess(identifiers.Pid, identifiers.Name, identifiers.AppPoolNamePrefix);
             }
             catch(ProcessNotSpecifiedException ex)
             {
@@ -37,7 +37,7 @@ namespace ClrSpy.Configuration
             var processResolver = new ProcessResolver(new ProcessFinder());
             try
             {
-                process = processResolver.ResolveTargetProcess(identifiers.Pid, identifiers.Name);
+                process = processResolver.ResolveTargetProcess(identifiers.Pid, identifiers.Name, identifiers.AppPoolNamePrefix);
                 return true;
             }
             catch

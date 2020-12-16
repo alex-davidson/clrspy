@@ -5,7 +5,7 @@
     <OutputType>Exe</OutputType>
     <Prefer32Bit>false</Prefer32Bit>
     <StartupObject>ClrSpy.Program</StartupObject>
-    <VersionPrefix>1.1.0</VersionPrefix>
+    <VersionPrefix>2.0.0</VersionPrefix>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="*.ncrunchproject" />
@@ -26,6 +26,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\x86Thunk\x86Thunk.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Web.Administration">
+      <HintPath>C:\Windows\System32\inetsrv\Microsoft.Web.Administration.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Target AfterTargets="AfterBuild;NonWinFodyTarget" Name="CleanReferenceCopyLocalPaths">
     <Delete Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />

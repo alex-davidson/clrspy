@@ -9,5 +9,6 @@ namespace ClrSpy.Processes
         string Name { get; }
         int Pid { get; }
         ProcessArchitecture Architecture { get; }
+        string IISAppPoolName { get; }
     }
 }
