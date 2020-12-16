@@ -1,111 +1,28 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C845B5A7-F5D0-4987-9382-CD058908AA8A}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClrSpy.UnitTests</RootNamespace>
-    <AssemblyName>ClrSpy.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <TargetFrameworks>net461</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Castle.Core, Version=4.1.1.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\packages\Castle.Core.4.1.1\lib\net45\Castle.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Diagnostics.Runtime, Version=0.8.31.1, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Diagnostics.Runtime.0.9.170809.03\lib\net40\Microsoft.Diagnostics.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Moq, Version=4.7.99.0, Culture=neutral, PublicKeyToken=69f491c39445e920, processorArchitecture=MSIL">
-      <HintPath>..\packages\Moq.4.7.99\lib\net45\Moq.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.8.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.3.8.1\lib\net45\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <None Remove="*.ncrunchproject" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArgumentParsingTests.cs" />
-    <Compile Include="CliSupport\TabulatorTests.cs" />
-    <Compile Include="Configuration\DumpMemoryJobFactoryValidationTests.cs" />
-    <Compile Include="Configuration\ProcessResolverTests.cs" />
-    <Compile Include="Configuration\ShowStacksJobFactoryValidationTests.cs" />
-    <Compile Include="Configuration\ShowHeapJobFactoryValidationTests.cs" />
-    <Compile Include="HeapAnalysis\Collections\HeapIndexTests.cs" />
-    <Compile Include="HeapAnalysis\Collections\ObjectAddressSetTests.cs" />
-    <Compile Include="HeapAnalysis\Inspectors\DelegateInspectorTests.cs" />
-    <Compile Include="HeapAnalysis\Model\ArrayTests.cs" />
-    <Compile Include="HeapAnalysis\Model\ConvenientPrimitiveTests.cs" />
-    <Compile Include="HeapAnalysis\Model\HeapEnumerationTests.cs" />
-    <Compile Include="HeapAnalysis\Model\LocalVarTests.cs" />
-    <Compile Include="HeapAnalysis\Model\ModelTypeEqualityTests.cs" />
-    <Compile Include="HeapAnalysis\Model\ObjectFieldTests.cs" />
-    <Compile Include="HeapAnalysis\HeapAnalysisScope.cs" />
-    <Compile Include="HeapAnalysis\HeapAnalysisTargetProcess.cs" />
-    <Compile Include="HeapAnalysis\Model\SameTypeFieldTests.cs" />
-    <Compile Include="HeapAnalysis\StructuredTypeFactoryTests.cs" />
-    <Compile Include="Native\PointerUtilsTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StatisticsTests.cs" />
-    <Compile Include="Utils\CommandLineUtils.cs" />
-    <Compile Include="Utils\DisposableTracker.cs" />
-    <Compile Include="Utils\ProcessWrapper.cs" />
-    <Compile Include="Utils\RandomSeed.cs" />
-    <Compile Include="Utils\TemporaryFile.cs" />
+    <ProjectReference Include="..\ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj" />
+    <ProjectReference Include="..\ClrSpy\ClrSpy.csproj" />
+    <ProjectReference Include="..\x86Thunk\x86Thunk.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <PackageReference Include="Microsoft.Diagnostics.Runtime">
+      <Version>0.9.170809.3</Version>
+    </PackageReference>
+    <PackageReference Include="Moq">
+      <Version>4.7.99</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit">
+      <Version>3.8.1</Version>
+    </PackageReference>
+    <PackageReference Include="NUnit.ConsoleRunner">
+      <Version>3.7.0</Version>
+    </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ClrSpy.UnitTests.HeapAnalysisTarget\ClrSpy.UnitTests.HeapAnalysisTarget.csproj">
-      <Project>{6e51e27b-1d89-49e9-a610-3c153bfca7a9}</Project>
-      <Name>ClrSpy.UnitTests.HeapAnalysisTarget</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ClrSpy\ClrSpy.csproj">
-      <Project>{E2111762-9A90-418D-9DAF-5C6563E4ECFE}</Project>
-      <Name>ClrSpy</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\x86Thunk\x86Thunk.csproj">
-      <Project>{3bfe8b6e-3c26-494f-9feb-b71a3e767d2b}</Project>
-      <Name>x86Thunk</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

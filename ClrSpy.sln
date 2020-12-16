@@ -1,7 +1,7 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 14.00
-# Visual Studio 2017
-VisualStudioVersion = 15.3.26730.16
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClrSpy", "ClrSpy\ClrSpy.csproj", "{E2111762-9A90-418D-9DAF-5C6563E4ECFE}"
 EndProject
