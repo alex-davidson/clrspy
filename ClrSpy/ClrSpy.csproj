@@ -1,122 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E2111762-9A90-418D-9DAF-5C6563E4ECFE}</ProjectGuid>
+    <TargetFrameworks>net45</TargetFrameworks>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ClrSpy</RootNamespace>
-    <AssemblyName>ClrSpy</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup>
     <StartupObject>ClrSpy.Program</StartupObject>
+    <VersionPrefix>1.1.0</VersionPrefix>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Architecture\ProcessArchitecture.cs" />
-    <Compile Include="CliSupport\Column.cs" />
-    <Compile Include="CliSupport\ConsoleEvents.cs" />
-    <Compile Include="CliSupport\ConsoleLog.cs" />
-    <Compile Include="CliSupport\ErrorWithExitCodeException.cs" />
-    <Compile Include="CliSupport\ForcedTerminationMonitor.cs" />
-    <Compile Include="CliSupport\ICancellationEvents.cs" />
-    <Compile Include="CliSupport\OptionsExtensions.cs" />
-    <Compile Include="CliSupport\Tabulator.cs" />
-    <Compile Include="CliSupport\TerminationReason.cs" />
-    <Compile Include="Configuration\DumpMemoryJobFactory.cs" />
-    <Compile Include="Configuration\ProcessListDescriber.cs" />
-    <Compile Include="Debugger\DebugMemoryDump.cs" />
-    <Compile Include="Debugger\DebugMode.cs" />
-    <Compile Include="Debugger\DebugRunningProcess.cs" />
-    <Compile Include="Debugger\DebugSession.cs" />
-    <Compile Include="Debugger\IDebugSessionTarget.cs" />
-    <Compile Include="CliSupport\IReceiveOptions.cs" />
-    <Compile Include="Configuration\JobFactoryHelpers.cs" />
-    <Compile Include="HeapAnalysis\MangledTypeNameParser.cs" />
-    <Compile Include="HeapAnalysis\StructuredType.cs" />
-    <Compile Include="HeapAnalysis\StructuredTypeFactory.cs" />
-    <Compile Include="HeapAnalysis\Inspectors\DelegateInspector.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrMethodEqualityComparer.cs" />
-    <Compile Include="Jobs\DumpMemoryJob.cs" />
-    <Compile Include="Jobs\ShowHeapJob.cs" />
-    <Compile Include="Configuration\ShowHeapJobFactory.cs" />
-    <Compile Include="Jobs\ShowStacksJob.cs" />
-    <Compile Include="Configuration\ShowStacksJobFactory.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrArrayObject.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrObjectUtils.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrReferenceObject.cs" />
-    <Compile Include="HeapAnalysis\ClrTypeEqualityComparer.cs" />
-    <Compile Include="HeapAnalysis\Model\IAddressable.cs" />
-    <Compile Include="HeapAnalysis\Model\IClrObject.cs" />
-    <Compile Include="HeapAnalysis\ClrObjectExtensions.cs" />
-    <Compile Include="HeapAnalysis\ClrObjectReader.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrPrimitive.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrClassObject.cs" />
-    <Compile Include="HeapAnalysis\ClrTypeExtensions.cs" />
-    <Compile Include="HeapAnalysis\Model\ClrStructObject.cs" />
-    <Compile Include="HeapAnalysis\HeapAnalysisExtensions.cs" />
-    <Compile Include="HeapAnalysis\Model\IClrCompositeObject.cs" />
-    <Compile Include="HeapAnalysis\Collections\HeapIndex.cs" />
-    <Compile Include="HeapAnalysis\Collections\ObjectAddressSet.cs" />
-    <Compile Include="Jobs\IDebugJob.cs" />
-    <Compile Include="Configuration\ProcessResolver.cs" />
-    <Compile Include="Configuration\IDebugJobFactory.cs" />
-    <Compile Include="Debugger\NoClrModulesFoundException.cs" />
-    <Compile Include="JobTypeParser.cs" />
-    <Compile Include="Native\PointerUtils.cs" />
-    <Compile Include="Processes\IProcessFinder.cs" />
-    <Compile Include="Processes\IProcessInfo.cs" />
-    <Compile Include="Processes\ProcessFinder.cs" />
-    <Compile Include="Processes\ProcessInfo.cs" />
-    <Compile Include="Processes\ProcessNotFoundException.cs" />
-    <Compile Include="JobType.cs" />
-    <Compile Include="Native\NativeMethods.cs" />
-    <Compile Include="Native\NativeWrappers.cs" />
-    <Compile Include="Processes\ProcessNotSpecifiedException.cs" />
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Architecture\Requires32BitEnvironmentException.cs" />
-    <Compile Include="Architecture\Requires64BitEnvironmentException.cs" />
-    <Compile Include="CliSupport\ThirdParty\Options.cs" />
-    <Compile Include="RunningProcessArguments.cs" />
-    <Compile Include="DumpedProcessArguments.cs" />
-    <Compile Include="Statistics.cs" />
-    <Compile Include="Util.cs" />
+    <None Remove="*.ncrunchproject" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Costura.Fody">
@@ -142,19 +34,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\x86Thunk\x86Thunk.csproj">
-      <Project>{3bfe8b6e-3c26-494f-9feb-b71a3e767d2b}</Project>
-      <Name>x86Thunk</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\x86Thunk\x86Thunk.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <Target AfterTargets="AfterBuild;NonWinFodyTarget" Name="CleanReferenceCopyLocalPaths">
     <Delete Files="@(ReferenceCopyLocalPaths->'$(OutDir)%(DestinationSubDirectory)%(Filename)%(Extension)')" />
   </Target>
