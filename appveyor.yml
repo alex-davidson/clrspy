@@ -10,15 +10,15 @@ build:
   project: ClrSpy.sln
 
 test_script:
-  - cmd: nunit3-console ClrSpy.UnitTests\bin\%CONFIGURATION%\ClrSpy.UnitTests.dll --result=ClrSpy.UnitTests.native.xml;format=AppVeyor
+  - cmd: nunit3-console ClrSpy.UnitTests\bin\%CONFIGURATION%\net461\ClrSpy.UnitTests.dll --result=ClrSpy.UnitTests.native.xml;format=AppVeyor
   - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\ClrSpy.UnitTests.native.xml))
-  - cmd: nunit3-console ClrSpy.UnitTests\bin\%CONFIGURATION%\ClrSpy.UnitTests.dll --x86 --result=ClrSpy.UnitTests.x86.xml;format=AppVeyor
+  - cmd: nunit3-console ClrSpy.UnitTests\bin\%CONFIGURATION%\net461\ClrSpy.UnitTests.dll --x86 --result=ClrSpy.UnitTests.x86.xml;format=AppVeyor
   - ps: (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/xunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path .\ClrSpy.UnitTests.x86.xml))
 
 artifacts:
-  - path: ClrSpy\bin\$(configuration)\ClrSpy.exe
+  - path: ClrSpy\bin\$(configuration)\net461\ClrSpy.exe
     name: ClrSpy.exe
-  - path: ClrSpy\bin\$(configuration)\ClrSpy.pdb
+  - path: ClrSpy\bin\$(configuration)\net461\ClrSpy.pdb
     name: ClrSpy.pdb
 
 notifications:
